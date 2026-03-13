@@ -60,11 +60,11 @@ export default function HeroSection({ scrollY }) {
       />
 
       {/* Header */}
-      <div className="relative z-10 text-center pt-6 px-4">
+      <div className="relative z-10 text-center pt-6 px-1">
         {/* Logo */}
         <div className="flex justify-center mb-3">
           <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
-            <img className="w-16 h-auto" src="/icons/college logo.png" alt="College Logo" />
+            <img className="w-19 h-auto mr-1" src="/icons/college logo.png" alt="College Logo" />
           </div>
         </div>
 
@@ -79,7 +79,7 @@ export default function HeroSection({ scrollY }) {
         </p>
 
         {/* Contact bar */}
-        <div className="flex flex-wrap justify-center gap-8 mt-5 text-sm text-white">
+        <div className="flex flex-wrap justify-center md:gap-8 mt-2 md:mt-5 text-sm text-white">
           <a
             href="http://mgmevening.mgmudupi.ac.in"
             className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
@@ -98,7 +98,7 @@ export default function HeroSection({ scrollY }) {
             href="mailto:mgmecudupi@gmail.com"
             className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
           >
-            <span className="text-yellow-400 text-xl">📧</span>
+            <span className="text-yellow-400 text-xl">✉️</span>
             mgmecudupi@gmail.com
           </a>
         </div>
@@ -116,45 +116,27 @@ export default function HeroSection({ scrollY }) {
         {/* BEYOND THE SCROLL title */}
         <div className="text-center mb-6 max-w-4xl w-full px-4">
           <img src="/icons/title.png" alt="Beyond The Scroll" className="w-full h-auto" />
-          <p className="text-yellow-400 italic text-xl md:text-2xl mt-2" style={{ fontFamily: "'Brush Script MT', cursive" }}>
-            REWRITING THE SOCIAL NARRATIVE
-          </p>
-          <p className="text-white text-lg md:text-xl font-semibold mt-2">
-            An Inter Collegiate CONFEST
-          </p>
         </div>
 
         {/* Brain + Lightbulb icon area */}
-        <div className="relative flex items-center justify-center mb-12 w-full max-w-5xl">
+        <div className="relative flex md:mb-4 items-center justify-center w-full max-w-5xl">
           {/* Center bulb with social icons */}
-          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
-            <img src="/icons/bulb.png" alt="Brain Bulb" className="w-full h-auto" />
-            
-            {/* Heartbeat line below */}
-            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-full">
-              <svg className="w-full h-12" viewBox="0 0 300 40" fill="none" preserveAspectRatio="none">
-                <polyline
-                  points="0,20 40,20 50,8 60,32 70,12 80,28 90,20 150,20"
-                  stroke="white"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+          <div className="relative w-64 h-64 md:w-xl md:h-90 flex items-center justify-center mt-3">
+            <img src="/icons/bulb.png" alt="Brain Bulb" className="w-full h-auto mr-4" />
+         
           </div>
 
           {/* Prize tags */}
-          <div className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2">
-            <img src="/icons/winner.png" alt="Overall Winners" className="w-32 md:w-40" />
+          <div className="absolute left-0 md:left-5 top-1/3 -translate-y-1/1">
+            <img src="/icons/winner.png" alt="Overall Winners" className="w-28 md:w-70" />
           </div>
-          <div className="absolute right-0 md:right-8 top-1/2 -translate-y-1/2">
-            <img src="/icons/runner.png" alt="Overall Runners" className="w-32 md:w-40" />
+          <div className="absolute right-0 md:right-5 top-2/3 -translate-y-0.1/100">
+            <img src="/icons/runner.png" alt="Overall Runners" className="w-28 md:w-70" />
           </div>
         </div>
 
         {/* Date and Venue */}
-        <div className="text-center mt-16">
+        <div className="text-center mt-8 md:mt-16">
           <p className="text-white font-bold text-xl md:text-2xl">
             Date: 27-03-2026 (Friday)
           </p>
