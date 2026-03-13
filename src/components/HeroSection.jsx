@@ -1,12 +1,4 @@
 import { useEffect, useRef } from "react";
-import { Globe, Phone, Mail, Instagram, Twitter, Youtube, Facebook } from "lucide-react";
-
-const socialIcons = [
-  { icon: Instagram, label: "Instagram", pos: "top-[38%] left-[18%]" },
-  { icon: Twitter, label: "X", pos: "top-[32%] left-[46%]" },
-  { icon: Youtube, label: "YouTube", pos: "top-[38%] right-[18%]" },
-  { icon: Facebook, label: "Facebook", pos: "top-[50%] left-[14%]" },
-];
 
 export default function HeroSection({ scrollY }) {
   const canvasRef = useRef(null);
@@ -59,8 +51,7 @@ export default function HeroSection({ scrollY }) {
       {/* Gold corner accents */}
       <div className="absolute top-0 left-0 w-28 h-28 border-t-2 border-l-2 border-yellow-500/60 rounded-tl-sm" />
       <div className="absolute top-0 right-0 w-28 h-28 border-t-2 border-r-2 border-yellow-500/60 rounded-tr-sm" />
-      <div className="absolute bottom-0 left-0 w-28 h-28 border-b-2 border-l-2 border-yellow-500/60 rounded-bl-sm" />
-      <div className="absolute bottom-0 right-0 w-28 h-28 border-b-2 border-r-2 border-yellow-500/60 rounded-br-sm" />
+     
 
       {/* Wave canvas */}
       <canvas
@@ -69,107 +60,105 @@ export default function HeroSection({ scrollY }) {
       />
 
       {/* Header */}
-      <div className="relative z-10 text-center pt-0 px-4">
+      <div className="relative z-10 text-center pt-6 px-4">
         {/* Logo */}
-        <div className="flex justify-center mb-4">
-          <div className="w-20 h-22 rounded-b-full border-2 bg-white flex items-center justify-center ">
-            <img className="w-26 h-auto" src="/icons/college logo.png"></img>
+        <div className="flex justify-center mb-3">
+          <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
+            <img className="w-16 h-auto" src="/icons/college logo.png" alt="College Logo" />
           </div>
         </div>
 
-        <p className="text-white text-xl tracking-[0.25em] uppercase mb-1">
-          MGM College Trust's
+        <p className="text-white text-base md:text-lg tracking-[0.2em] uppercase mb-1">
+          MGM COLLEGE TRUST'S
         </p>
-        <h1 className="text-white font-bold text-xl md:text-3xl tracking-wide uppercase leading-tight">
-          Mahatma Gandhi Memorial Evening College
+        <h1 className="text-white font-bold text-2xl md:text-4xl tracking-wide uppercase leading-tight">
+          MAHATMA GANDHI MEMORIAL EVENING COLLEGE
         </h1>
-        <p className="text-white text-sm tracking-widest mt-1">
-          UDUPI – 576 102
+        <p className="text-white text-base md:text-lg tracking-wider mt-2">
+          UDUPI - 576 102
         </p>
 
         {/* Contact bar */}
-        <div className="flex flex-wrap justify-center gap-6 mt-4 text-sm text-white/70">
+        <div className="flex flex-wrap justify-center gap-8 mt-5 text-sm text-white">
           <a
             href="http://mgmevening.mgmudupi.ac.in"
-            className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors"
+            className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
           >
-            <Globe size={14}  />
+            <span className="text-yellow-400 text-xl">🌐</span>
             mgmevening.mgmudupi.ac.in
           </a>
           <a
             href="tel:08202001877"
-            className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors"
+            className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
           >
-            <Phone size={14} />
-            0820 – 2001877
+            <span className="text-yellow-400 text-xl">📞</span>
+            0820 - 2001877
           </a>
           <a
             href="mailto:mgmecudupi@gmail.com"
-            className="flex items-center gap-1.5 hover:text-yellow-400 transition-colors"
+            className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
           >
-            <Mail size={14} />
+            <span className="text-yellow-400 text-xl">📧</span>
             mgmecudupi@gmail.com
           </a>
         </div>
       </div>
 
       {/* Main Hero Content */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-12">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-8">
         <p
-          className="text-white/60 italic text-4xl mb-2"
-          style={{ fontFamily: "'Georgia', serif" }}
+          className="text-white italic text-3xl md:text-5xl mb-4"
+          style={{ fontFamily: "'Brush Script MT', cursive" }}
         >
           Presents
         </p>
 
         {/* BEYOND THE SCROLL title */}
-        <div className="text-center mb-4 px-80">
-         <img src="/icons/title.png"></img>
+        <div className="text-center mb-6 max-w-4xl w-full px-4">
+          <img src="/icons/title.png" alt="Beyond The Scroll" className="w-full h-auto" />
+          <p className="text-yellow-400 italic text-xl md:text-2xl mt-2" style={{ fontFamily: "'Brush Script MT', cursive" }}>
+            REWRITING THE SOCIAL NARRATIVE
+          </p>
+          <p className="text-white text-lg md:text-xl font-semibold mt-2">
+            An Inter Collegiate CONFEST
+          </p>
         </div>
 
-
         {/* Brain + Lightbulb icon area */}
-        <div className="relative flex items-center justify-center mb-10">
-          {/* Social media icons orbiting */}
-          <div className="relative w-84 h-84 md:w-80 md:h-80">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <img src="/icons/bulb.png"></img>
-                </div>
-            {/* Heartbeat line */}
-            <svg
-              className="absolute -bottom-8 left-0 w-full"
-              viewBox="0 0 280 40"
-              fill="none"
-            >
-              <polyline
-                points="0,20 30,20 40,5 50,35 60,10 70,30 80,20 110,20 120,2 130,38 140,20 280,20"
-                stroke="white"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+        <div className="relative flex items-center justify-center mb-12 w-full max-w-5xl">
+          {/* Center bulb with social icons */}
+          <div className="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+            <img src="/icons/bulb.png" alt="Brain Bulb" className="w-full h-auto" />
+            
+            {/* Heartbeat line below */}
+            <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 w-full">
+              <svg className="w-full h-12" viewBox="0 0 300 40" fill="none" preserveAspectRatio="none">
+                <polyline
+                  points="0,20 40,20 50,8 60,32 70,12 80,28 90,20 150,20"
+                  stroke="white"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
 
           {/* Prize tags */}
-          <div className="absolute left-0 md:-left-2 top-1/3 -translate-y-1/2">
-            <div className="bg-red-600 border-2 border-yellow-400 rounded-lg px-4 py-2 text-center shadow-lg">
-              <p className="text-yellow-300 text-[10px] font-bold tracking-wider uppercase">Overall Winners</p>
-              <p className="text-white font-black text-lg">₹10,000/-</p>
-              <p className="text-yellow-300 text-2xl">🥇</p>
-            </div>
+          <div className="absolute left-0 md:left-8 top-1/2 -translate-y-1/2">
+            <img src="/icons/winner.png" alt="Overall Winners" className="w-32 md:w-40" />
           </div>
-          <div className="absolute right-0 md:-right-2 top-1/2 -translate-y-1/2">
-            <img src="/icons/runner.png"></img>
+          <div className="absolute right-0 md:right-8 top-1/2 -translate-y-1/2">
+            <img src="/icons/runner.png" alt="Overall Runners" className="w-32 md:w-40" />
           </div>
         </div>
 
         {/* Date and Venue */}
-        <div className="text-center mt-8">
-          <p className="text-white font-bold text-lg md:text-xl">
+        <div className="text-center mt-16">
+          <p className="text-white font-bold text-xl md:text-2xl">
             Date: 27-03-2026 (Friday)
           </p>
-          <p className="text-white/80 text-base md:text-lg mt-1">
+          <p className="text-white text-base md:text-lg mt-2">
             Venue: T. Mohandas Pai Platinum Jubilee Block,
             <br />
             MGM College Campus, Udupi
