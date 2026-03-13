@@ -98,7 +98,7 @@ export default function HeroSection({ scrollY }) {
             href="mailto:mgmecudupi@gmail.com"
             className="flex items-center gap-2 hover:text-yellow-400 transition-colors"
           >
-            <span className="text-yellow-400 text-xl">📧</span>
+            <span className="text-yellow-400 text-xl">✉️</span>
             mgmecudupi@gmail.com
           </a>
         </div>

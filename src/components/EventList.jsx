@@ -477,9 +477,9 @@ export default function EventList() {
           transform: mounted ? "translateY(0)" : "translateY(-30px)",
           transition: "all 0.9s cubic-bezier(0.23,1,0.32,1)",
         }}>
-          <div style={{ animation: "float 4s ease-in-out infinite" }}>
+          <div className="hidden md:block" style={{ animation: "float 4s ease-in-out infinite" }}>
             <img src="/icons/bulb.png" alt="Logo"
-              style={{ width: 140, height: 140, objectFit: "contain", filter: "drop-shadow(0 0 32px #f5c84275)" }} />
+              style={{ width: 240, height: 240, objectFit: "contain", filter: "drop-shadow(0 0 32px #f5c84275)" }} />
           </div>
 
           <div>
@@ -511,7 +511,7 @@ export default function EventList() {
             </div>
           </div>
 
-          <div style={{ animation: "float 4s ease-in-out infinite 1.2s" }}>
+          <div className="hidden md:block" style={{ animation: "float 4s ease-in-out infinite 1.2s" }}>
             <img src="/icons/title.png" alt="Beyond The Scroll"
               style={{ width: 200, height: "auto", filter: "drop-shadow(0 0 16px rgba(255,255,255,0.22))" }} />
           </div>
