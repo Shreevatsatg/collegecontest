@@ -440,7 +440,7 @@ export default function EventList() {
         position: "relative",
         padding: "110px 32px 130px",
         overflow: "hidden",
-        background: "radial-gradient(ellipse at 25% 40%, #0d2a4a 0%, #081525 45%, #050e1a 100%)",
+        background: "radial-gradient(ellipse at 30% 50%, #0d2a4a 0%, #081525 40%, #050e1a 100%)",
       }}>
         {/* Atmospheric blobs */}
         {[
