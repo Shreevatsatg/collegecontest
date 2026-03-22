@@ -72,7 +72,7 @@ function useRipple(color) {
 
 function GalleryOverlay({ event, images, startIndex, onClose }) {
   const [current, setCurrent] = useState(startIndex || 0);
-  const [slideState, setSlideState] = useState("idle"); // "idle" | "exit-left" | "exit-right" | "enter-left" | "enter-right"
+  const [slideState, setSlideState] = useState("idle");
   const [displayIndex, setDisplayIndex] = useState(startIndex || 0);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -103,22 +103,15 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
   const navigate = useCallback((dir) => {
     if (isAnimating || images.length < 2) return;
     setIsAnimating(true);
-
     const nextIdx = dir === "right"
       ? (current + 1) % images.length
       : (current - 1 + images.length) % images.length;
-
-    // Phase 1: slide current OUT
     setSlideState(dir === "right" ? "exit-left" : "exit-right");
-
     setTimeout(() => {
-      // Phase 2: snap next image in from opposite side (no transition)
       setDisplayIndex(nextIdx);
       setSlideState(dir === "right" ? "enter-right" : "enter-left");
-
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          // Phase 3: slide next image INTO center
           setSlideState("idle");
           setCurrent(nextIdx);
           setTimeout(() => setIsAnimating(false), 360);
@@ -127,7 +120,6 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
     }, 320);
   }, [isAnimating, current, images.length]);
 
-  // Touch swipe
   const onTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -140,7 +132,6 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
     touchStartX.current = null;
   };
 
-  // Compute image transform
   const getImageStyle = () => {
     const base = { transition: "none", willChange: "transform, opacity" };
     switch (slideState) {
@@ -154,151 +145,46 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
   };
 
   return (
-    <div
-      onClick={handleClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 9999,
-        background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)",
-        backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)",
-        transition: "background 0.38s ease, backdrop-filter 0.38s ease",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-      }}
-    >
-      {/* ── Header bar ── */}
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: "absolute", top: 0, left: 0, right: 0,
-          padding: "18px 24px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          background: "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%)",
-          transform: overlayVisible ? "translateY(0)" : "translateY(-24px)",
-          opacity: overlayVisible ? 1 : 0,
-          transition: "all 0.48s cubic-bezier(0.23,1,0.32,1) 0.08s",
-          zIndex: 10,
-        }}
-      >
+    <div onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 9999, background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)", backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)", transition: "background 0.38s ease, backdrop-filter 0.38s ease", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%)", transform: overlayVisible ? "translateY(0)" : "translateY(-24px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.48s cubic-bezier(0.23,1,0.32,1) 0.08s", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <div style={{
-            width: 40, height: 40, borderRadius: "50%",
-            background: `radial-gradient(circle at 35% 35%, ${event.accent}, ${event.color})`,
-            boxShadow: `0 0 20px ${event.color}99`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontFamily: "'Bebas Neue', Impact, sans-serif",
-            fontSize: 20, color: "#fff", fontWeight: 900, flexShrink: 0,
-          }}>{event.number}</div>
+          <div style={{ width: 40, height: 40, borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${event.accent}, ${event.color})`, boxShadow: `0 0 20px ${event.color}99`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: 20, color: "#fff", fontWeight: 900, flexShrink: 0 }}>{event.number}</div>
           <div>
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: event.accent, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 2 }}>{event.codename}</div>
             <div style={{ fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: 22, letterSpacing: "0.05em", color: "#fff", lineHeight: 1 }}>{event.title}</div>
           </div>
         </div>
-
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>
             <span style={{ color: event.accent, fontWeight: 700 }}>{current + 1}</span>{" / "}{images.length}
           </div>
-          <button
-            onClick={handleClose}
-            style={{
-              background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)",
-              borderRadius: "50%", width: 38, height: 38,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", color: "rgba(255,255,255,0.65)", fontSize: 18,
-              transition: "all 0.22s ease",
-            }}
+          <button onClick={handleClose} style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", borderRadius: "50%", width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "rgba(255,255,255,0.65)", fontSize: 18, transition: "all 0.22s ease" }}
             onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.16)"; e.currentTarget.style.color = "#fff"; }}
             onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "rgba(255,255,255,0.65)"; }}
           >✕</button>
         </div>
       </div>
 
-      {/* ── Main image frame ── */}
-      <div
-        onClick={e => e.stopPropagation()}
-        onTouchStart={onTouchStart}
-        onTouchEnd={onTouchEnd}
-        style={{
-          position: "relative",
-          width: "min(94vw, 1040px)",
-          borderRadius: 22,
-          overflow: "hidden",
-          transform: overlayVisible ? "scale(1) translateY(0)" : "scale(0.86) translateY(36px)",
-          opacity: overlayVisible ? 1 : 0,
-          transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.05s",
-          boxShadow: `0 0 0 1px ${event.color}44, 0 50px 120px rgba(0,0,0,0.85), 0 0 80px ${event.color}1a`,
-          userSelect: "none",
-        }}
-      >
-        {/* Image container — fixed 16:9 */}
+      <div onClick={e => e.stopPropagation()} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
+        style={{ position: "relative", width: "min(94vw, 1040px)", borderRadius: 22, overflow: "hidden", transform: overlayVisible ? "scale(1) translateY(0)" : "scale(0.86) translateY(36px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.05s", boxShadow: `0 0 0 1px ${event.color}44, 0 50px 120px rgba(0,0,0,0.85), 0 0 80px ${event.color}1a`, userSelect: "none" }}>
         <div style={{ position: "relative", width: "100%", paddingBottom: "60%", background: "#050c18", overflow: "hidden" }}>
-          <img
-            key={displayIndex}
-            src={images[displayIndex]}
-            alt={`${event.title} — photo ${displayIndex + 1}`}
-            draggable={false}
-            style={{
-              position: "absolute", inset: 0,
-              width: "100%", height: "100%",
-              objectFit: "cover",
-              ...getImageStyle(),
-            }}
-          />
-
-          {/* Cinematic gradients */}
+          <img key={displayIndex} src={images[displayIndex]} alt={`${event.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", ...getImageStyle() }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 35%, transparent 75%, rgba(0,0,0,0.25) 100%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "22%", background: "linear-gradient(90deg, rgba(0,0,0,0.28), transparent)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "22%", background: "linear-gradient(270deg, rgba(0,0,0,0.28), transparent)", pointerEvents: "none" }} />
-
-          {/* Accent bottom line */}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent 0%, ${event.color} 30%, ${event.accent} 50%, ${event.color} 70%, transparent 100%)`, opacity: 0.9 }} />
-
-          {/* Caption area */}
           <div style={{ position: "absolute", bottom: 14, left: 20, right: 20, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}>
-              {event.title.toUpperCase()}
-            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}>{event.title.toUpperCase()}</div>
           </div>
         </div>
-
-        {/* Nav arrows */}
-        {images.length > 1 && (
-          <>
-            <GalleryNavArrow dir="left" color={event.color} accent={event.accent} onClick={() => navigate("left")} />
-            <GalleryNavArrow dir="right" color={event.color} accent={event.accent} onClick={() => navigate("right")} />
-          </>
-        )}
+        {images.length > 1 && (<><GalleryNavArrow dir="left" color={event.color} accent={event.accent} onClick={() => navigate("left")} /><GalleryNavArrow dir="right" color={event.color} accent={event.accent} onClick={() => navigate("right")} /></>)}
       </div>
 
-      {/* ── Thumbnail strip ── */}
       {images.length > 1 && (
-        <div
-          onClick={e => e.stopPropagation()}
-          style={{
-            display: "flex", gap: 8, marginTop: 16,
-            maxWidth: "min(94vw, 1040px)", overflowX: "auto",
-            paddingBottom: 2, scrollbarWidth: "none",
-            transform: overlayVisible ? "translateY(0)" : "translateY(18px)",
-            opacity: overlayVisible ? 1 : 0,
-            transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.16s",
-          }}
-        >
+        <div onClick={e => e.stopPropagation()} style={{ display: "flex", gap: 8, marginTop: 16, maxWidth: "min(94vw, 1040px)", overflowX: "auto", paddingBottom: 2, scrollbarWidth: "none", transform: overlayVisible ? "translateY(0)" : "translateY(18px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.16s" }}>
           {images.map((src, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                if (isAnimating || idx === current) return;
-                navigate(idx > current ? "right" : "left");
-              }}
-              style={{
-                flexShrink: 0, width: 68, height: 46,
-                borderRadius: 8, overflow: "hidden", cursor: "pointer",
-                border: idx === current ? `2.5px solid ${event.accent}` : "2px solid rgba(255,255,255,0.1)",
-                boxShadow: idx === current ? `0 0 16px ${event.color}99` : "none",
-                transform: idx === current ? "scale(1.1)" : "scale(1)",
-                transition: "all 0.28s cubic-bezier(0.34,1.56,0.64,1)",
-                opacity: idx === current ? 1 : 0.48,
-              }}
+            <div key={idx} onClick={() => { if (isAnimating || idx === current) return; navigate(idx > current ? "right" : "left"); }}
+              style={{ flexShrink: 0, width: 68, height: 46, borderRadius: 8, overflow: "hidden", cursor: "pointer", border: idx === current ? `2.5px solid ${event.accent}` : "2px solid rgba(255,255,255,0.1)", boxShadow: idx === current ? `0 0 16px ${event.color}99` : "none", transform: idx === current ? "scale(1.1)" : "scale(1)", transition: "all 0.28s cubic-bezier(0.34,1.56,0.64,1)", opacity: idx === current ? 1 : 0.48 }}
               onMouseEnter={e => { if (idx !== current) { e.currentTarget.style.opacity = "0.8"; e.currentTarget.style.transform = "scale(1.05)"; } }}
               onMouseLeave={e => { if (idx !== current) { e.currentTarget.style.opacity = "0.48"; e.currentTarget.style.transform = "scale(1)"; } }}
             >
@@ -308,38 +194,17 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
         </div>
       )}
 
-      {/* ── Dot indicators ── */}
       {images.length > 1 && (
-        <div
-          onClick={e => e.stopPropagation()}
-          style={{
-            display: "flex", gap: 7, marginTop: 14,
-            opacity: overlayVisible ? 0.9 : 0,
-            transition: "opacity 0.52s ease 0.2s",
-          }}
-        >
+        <div onClick={e => e.stopPropagation()} style={{ display: "flex", gap: 7, marginTop: 14, opacity: overlayVisible ? 0.9 : 0, transition: "opacity 0.52s ease 0.2s" }}>
           {images.map((_, idx) => (
-            <div
-              key={idx}
-              onClick={() => { if (!isAnimating && idx !== current) navigate(idx > current ? "right" : "left"); }}
-              style={{
-                width: idx === current ? 24 : 7, height: 7, borderRadius: 4,
-                background: idx === current ? event.accent : "rgba(255,255,255,0.2)",
-                boxShadow: idx === current ? `0 0 12px ${event.accent}aa` : "none",
-                cursor: "pointer",
-                transition: "all 0.32s cubic-bezier(0.34,1.56,0.64,1)",
-              }}
+            <div key={idx} onClick={() => { if (!isAnimating && idx !== current) navigate(idx > current ? "right" : "left"); }}
+              style={{ width: idx === current ? 24 : 7, height: 7, borderRadius: 4, background: idx === current ? event.accent : "rgba(255,255,255,0.2)", boxShadow: idx === current ? `0 0 12px ${event.accent}aa` : "none", cursor: "pointer", transition: "all 0.32s cubic-bezier(0.34,1.56,0.64,1)" }}
             />
           ))}
         </div>
       )}
 
-      {/* ── Hint ── */}
-      <div style={{
-        marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 10,
-        color: "rgba(255,255,255,0.2)", letterSpacing: "0.16em", textTransform: "uppercase",
-        opacity: overlayVisible ? 1 : 0, transition: "opacity 0.5s ease 0.28s",
-      }}>
+      <div style={{ marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: "0.16em", textTransform: "uppercase", opacity: overlayVisible ? 1 : 0, transition: "opacity 0.5s ease 0.28s" }}>
         {images.length > 1 ? "← → keys · swipe · tap outside to close" : "tap outside to close"}
       </div>
     </div>
@@ -349,40 +214,20 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
 function GalleryNavArrow({ dir, color, accent, onClick }) {
   const [hov, setHov] = useState(false);
   return (
-    <button
-      onClick={e => { e.stopPropagation(); onClick(); }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        position: "absolute", top: "50%",
-        [dir === "left" ? "left" : "right"]: 14,
-        width: 50, height: 50, borderRadius: "50%",
-        background: hov ? "rgba(0,0,0,0.78)" : "rgba(0,0,0,0.42)",
-        backdropFilter: "blur(12px)",
-        border: `1.5px solid ${hov ? color + "cc" : "rgba(255,255,255,0.15)"}`,
-        boxShadow: hov ? `0 0 24px ${color}77` : "none",
-        color: hov ? accent : "rgba(255,255,255,0.65)",
-        fontSize: 26, lineHeight: 1,
-        cursor: "pointer", display: "flex",
-        alignItems: "center", justifyContent: "center",
-        transform: `translateY(-50%) ${hov ? (dir === "left" ? "translateX(-4px)" : "translateX(4px)") : ""}`,
-        transition: "all 0.26s cubic-bezier(0.34,1.56,0.64,1)",
-        zIndex: 5,
-      }}
+    <button onClick={e => { e.stopPropagation(); onClick(); }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      style={{ position: "absolute", top: "50%", [dir === "left" ? "left" : "right"]: 14, width: 50, height: 50, borderRadius: "50%", background: hov ? "rgba(0,0,0,0.78)" : "rgba(0,0,0,0.42)", backdropFilter: "blur(12px)", border: `1.5px solid ${hov ? color + "cc" : "rgba(255,255,255,0.15)"}`, boxShadow: hov ? `0 0 24px ${color}77` : "none", color: hov ? accent : "rgba(255,255,255,0.65)", fontSize: 26, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transform: `translateY(-50%) ${hov ? (dir === "left" ? "translateX(-4px)" : "translateX(4px)") : ""}`, transition: "all 0.26s cubic-bezier(0.34,1.56,0.64,1)", zIndex: 5 }}
     >{dir === "left" ? "‹" : "›"}</button>
   );
 }
 
-// ── Photo Preview Strip (inside event card) ────────────────
+// ── Photo Preview Strip ────────────────────────────────────
 
 function PhotoStrip({ images, color, accent, onOpen }) {
   if (!images || images.length === 0) return null;
   const count = images.length;
   const preview = images.slice(0, Math.min(count, 3));
-
   return (
     <div style={{ marginTop: 20 }}>
-      {/* Divider label */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <div style={{ height: 1, flex: 1, background: `linear-gradient(90deg, ${color}66, transparent)` }} />
         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: accent, letterSpacing: "0.18em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: 5 }}>
@@ -391,54 +236,25 @@ function PhotoStrip({ images, color, accent, onOpen }) {
         </span>
         <div style={{ height: 1, flex: 1, background: `linear-gradient(270deg, ${color}66, transparent)` }} />
       </div>
-
-      {/* Grid thumbnails */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: count === 1 ? "1fr" : "1fr 1fr 1fr",
-        gap: 5, borderRadius: 14, overflow: "hidden",
-        border: `1px solid ${color}33`,
-        cursor: "pointer",
-      }}>
+      <div style={{ display: "grid", gridTemplateColumns: count === 1 ? "1fr" : "1fr 1fr 1fr", gap: 5, borderRadius: 14, overflow: "hidden", border: `1px solid ${color}33`, cursor: "pointer" }}>
         {preview.map((src, i) => {
           const isOverflowSlot = i === 2 && count > 3;
           return (
-            <div
-              key={i}
-              onClick={() => onOpen(i)}
-              style={{
-                position: "relative",
-                paddingBottom: count === 1 ? "48%" : "70%",
-                overflow: "hidden",
-                background: "#07111f",
-                gridColumn: count === 1 ? "1 / -1" : undefined,
-              }}
-            >
-              <img
-                src={src}
-                alt={`photo ${i + 1}`}
-                style={{
-                  position: "absolute", inset: 0,
-                  width: "100%", height: "100%", objectFit: "cover",
-                  transition: "transform 0.42s cubic-bezier(0.23,1,0.32,1)",
-                }}
+            <div key={i} onClick={() => onOpen(i)} style={{ position: "relative", paddingBottom: count === 1 ? "48%" : "70%", overflow: "hidden", background: "#07111f", gridColumn: count === 1 ? "1 / -1" : undefined }}>
+              <img src={src} alt={`photo ${i + 1}`} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.42s cubic-bezier(0.23,1,0.32,1)" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.08)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; }}
               />
-              {/* Hover shimmer */}
-              <div
-                style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${color}1a, transparent)`, opacity: 0, transition: "opacity 0.3s" }}
+              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg, ${color}1a, transparent)`, opacity: 0, transition: "opacity 0.3s" }}
                 onMouseEnter={e => { e.currentTarget.style.opacity = "1"; }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = "0"; }}
               />
-              {/* +N more overlay */}
               {isOverflowSlot && (
                 <div style={{ position: "absolute", inset: 0, background: "rgba(4,10,22,0.78)", backdropFilter: "blur(5px)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 3 }}>
                   <span style={{ fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: 30, color: "#fff", lineHeight: 1 }}>+{count - 2}</span>
                   <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: "rgba(255,255,255,0.45)", letterSpacing: "0.14em", textTransform: "uppercase" }}>more</span>
                 </div>
               )}
-              {/* Single image play-icon hint */}
               {count === 1 && (
                 <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(0,0,0,0.52)", backdropFilter: "blur(8px)", border: `1.5px solid ${color}77`, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: `0 0 22px ${color}66` }}>
@@ -450,21 +266,8 @@ function PhotoStrip({ images, color, accent, onOpen }) {
           );
         })}
       </div>
-
-      {/* View all button */}
       {count > 1 && (
-        <button
-          onClick={() => onOpen(0)}
-          style={{
-            marginTop: 8, width: "100%",
-            background: `linear-gradient(135deg, ${color}18, ${color}09)`,
-            border: `1px solid ${color}44`, borderRadius: 10,
-            padding: "9px 0", color: accent,
-            fontFamily: "'DM Mono', monospace", fontSize: 10.5,
-            letterSpacing: "0.16em", textTransform: "uppercase",
-            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            transition: "all 0.25s ease",
-          }}
+        <button onClick={() => onOpen(0)} style={{ marginTop: 8, width: "100%", background: `linear-gradient(135deg, ${color}18, ${color}09)`, border: `1px solid ${color}44`, borderRadius: 10, padding: "9px 0", color: accent, fontFamily: "'DM Mono', monospace", fontSize: 10.5, letterSpacing: "0.16em", textTransform: "uppercase", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.25s ease" }}
           onMouseEnter={e => { e.currentTarget.style.background = `linear-gradient(135deg, ${color}2e, ${color}14)`; e.currentTarget.style.boxShadow = `0 0 20px ${color}33`; }}
           onMouseLeave={e => { e.currentTarget.style.background = `linear-gradient(135deg, ${color}18, ${color}09)`; e.currentTarget.style.boxShadow = "none"; }}
         >
@@ -498,21 +301,8 @@ function NumberBubble({ number, color, accent, visible, status }) {
   const isDone = status === "done";
   const isLive = status === "ongoing";
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        width: 64, height: 64, borderRadius: "50%",
-        background: isDone ? `radial-gradient(circle at 35% 35%, ${accent}88, ${color}66)` : `radial-gradient(circle at 35% 35%, ${accent}, ${color})`,
-        boxShadow: isLive ? `0 0 0 4px #ff6b0044, 0 0 28px #ff6b0099` : hovered ? `0 0 0 10px ${color}25, 0 0 44px ${color}90` : `0 0 0 4px ${color}38, 0 0 28px ${color}60`,
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontFamily: "'Bebas Neue', Impact, sans-serif", fontWeight: 900, fontSize: 28,
-        color: isDone ? "rgba(255,255,255,0.45)" : "#fff",
-        cursor: "default", zIndex: 10, position: "relative",
-        transform: hovered ? "scale(1.18) rotate(-6deg)" : visible ? "scale(1)" : "scale(0.4)",
-        transition: "all 0.45s cubic-bezier(0.34,1.56,0.64,1)", flexShrink: 0,
-      }}
-    >
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+      style={{ width: 64, height: 64, borderRadius: "50%", background: isDone ? `radial-gradient(circle at 35% 35%, ${accent}88, ${color}66)` : `radial-gradient(circle at 35% 35%, ${accent}, ${color})`, boxShadow: isLive ? `0 0 0 4px #ff6b0044, 0 0 28px #ff6b0099` : hovered ? `0 0 0 10px ${color}25, 0 0 44px ${color}90` : `0 0 0 4px ${color}38, 0 0 28px ${color}60`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', Impact, sans-serif", fontWeight: 900, fontSize: 28, color: isDone ? "rgba(255,255,255,0.45)" : "#fff", cursor: "default", zIndex: 10, position: "relative", transform: hovered ? "scale(1.18) rotate(-6deg)" : visible ? "scale(1)" : "scale(0.4)", transition: "all 0.45s cubic-bezier(0.34,1.56,0.64,1)", flexShrink: 0 }}>
       {isDone ? "✓" : number}
       <span style={{ position: "absolute", inset: -7, borderRadius: "50%", border: `1.5px dashed ${isLive ? "#ff6b00" : color}55`, animation: (hovered || isLive) ? "spin 2.5s linear infinite" : "none" }} />
     </div>
@@ -524,45 +314,16 @@ function NumberBubble({ number, color, accent, visible, status }) {
 function CoordinatorInfo({ coordinator, color, accent, isDone }) {
   if (!coordinator) return null;
   return (
-    <div style={{
-      marginTop: 14,
-      display: "flex", alignItems: "center", gap: 10,
-      background: `linear-gradient(135deg, ${color}14, ${color}07)`,
-      border: `1px solid ${color}33`,
-      borderRadius: 10, padding: "8px 14px",
-    }}>
-      {/* Person icon */}
+    <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 10, background: `linear-gradient(135deg, ${color}14, ${color}07)`, border: `1px solid ${color}33`, borderRadius: 10, padding: "8px 14px" }}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isDone ? "rgba(255,255,255,0.3)" : accent} strokeWidth="2.2" style={{ flexShrink: 0 }}>
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
       </svg>
       <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
-        <span style={{
-          fontFamily: "'DM Mono', monospace", fontSize: 10,
-          color: isDone ? "rgba(255,255,255,0.25)" : accent,
-          letterSpacing: "0.14em", textTransform: "uppercase",
-        }}>Faculty Coordinator</span>
+        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: isDone ? "rgba(255,255,255,0.25)" : accent, letterSpacing: "0.14em", textTransform: "uppercase" }}>Faculty Coordinator</span>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{
-            fontFamily: "'DM Mono', monospace", fontSize: 12.5, fontWeight: 500,
-            color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)",
-            whiteSpace: "nowrap",
-          }}>{coordinator.name}</span>
-          <a
-            href={`tel:${coordinator.phone}`}
-            onClick={e => e.stopPropagation()}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              fontFamily: "'DM Mono', monospace", fontSize: 11.5,
-              color: isDone ? "rgba(255,255,255,0.3)" : color,
-              textDecoration: "none",
-              background: `${color}20`,
-              border: `1px solid ${color}44`,
-              borderRadius: 6, padding: "2px 8px",
-              transition: "all 0.22s ease",
-              pointerEvents: isDone ? "none" : "auto",
-              whiteSpace: "nowrap",
-            }}
+          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5, fontWeight: 500, color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)", whiteSpace: "nowrap" }}>{coordinator.name}</span>
+          <a href={`tel:${coordinator.phone}`} onClick={e => e.stopPropagation()}
+            style={{ display: "inline-flex", alignItems: "center", gap: 5, fontFamily: "'DM Mono', monospace", fontSize: 11.5, color: isDone ? "rgba(255,255,255,0.3)" : color, textDecoration: "none", background: `${color}20`, border: `1px solid ${color}44`, borderRadius: 6, padding: "2px 8px", transition: "all 0.22s ease", pointerEvents: isDone ? "none" : "auto", whiteSpace: "nowrap" }}
             onMouseEnter={e => { if (!isDone) { e.currentTarget.style.background = `${color}38`; e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; } }}
             onMouseLeave={e => { e.currentTarget.style.background = `${color}20`; e.currentTarget.style.boxShadow = "none"; }}
           >
@@ -587,57 +348,34 @@ function CardBody({ event, isLeft, isMobile, onOpenGallery }) {
   const isLive = status === "ongoing";
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onMouseDown={onMouseDown}
-      style={{
-        position: "relative", overflow: "hidden", width: "100%",
-        background: hovered ? "linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.04))" : "linear-gradient(135deg, rgba(255,255,255,0.065), rgba(255,255,255,0.018))",
-        border: `1px solid ${isLive ? "#ff6b00cc" : hovered ? event.color + "95" : "rgba(255,255,255,0.09)"}`,
-        borderRadius: isMobile ? 16 : 18, padding: isMobile ? "18px 18px" : "22px 24px",
-        cursor: "default",
-        transform: hovered && !isMobile ? "translateY(-4px)" : "translateY(0)",
-        boxShadow: isLive ? `0 0 28px #ff6b0044, 0 4px 24px rgba(0,0,0,0.28)` : hovered ? `0 20px 60px ${event.color}38` : "0 4px 24px rgba(0,0,0,0.28)",
-        transition: "all 0.38s cubic-bezier(0.23,1,0.32,1)",
-        backdropFilter: "blur(18px)",
-        textAlign: isMobile ? "left" : isLeft ? "left" : "right",
-      }}
-    >
+    <div onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onMouseDown={onMouseDown}
+      style={{ position: "relative", overflow: "hidden", width: "100%", background: hovered ? "linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.04))" : "linear-gradient(135deg, rgba(255,255,255,0.065), rgba(255,255,255,0.018))", border: `1px solid ${isLive ? "#ff6b00cc" : hovered ? event.color + "95" : "rgba(255,255,255,0.09)"}`, borderRadius: isMobile ? 16 : 18, padding: isMobile ? "18px 18px" : "22px 24px", cursor: "default", transform: hovered && !isMobile ? "translateY(-4px)" : "translateY(0)", boxShadow: isLive ? `0 0 28px #ff6b0044, 0 4px 24px rgba(0,0,0,0.28)` : hovered ? `0 20px 60px ${event.color}38` : "0 4px 24px rgba(0,0,0,0.28)", transition: "all 0.38s cubic-bezier(0.23,1,0.32,1)", backdropFilter: "blur(18px)", textAlign: isMobile ? "left" : isLeft ? "left" : "right" }}>
       {rippleEls}
-      {/* Top bar */}
       <div style={{ position: "absolute", top: 0, left: (isMobile || isLeft) ? 0 : "auto", right: (isMobile || isLeft) ? "auto" : 0, width: hovered ? "100%" : "42%", height: 3, background: isDone ? `linear-gradient(90deg, ${event.color}55, ${event.accent}55)` : `linear-gradient(90deg, ${event.color}, ${event.accent})`, borderRadius: 2, transition: "width 0.48s cubic-bezier(0.23,1,0.32,1)" }} />
       {isLive && <div style={{ position: "absolute", inset: 0, borderRadius: isMobile ? 16 : 18, border: "1px solid #ff6b0055", animation: "liveGlow 1.8s ease-in-out infinite", pointerEvents: "none" }} />}
 
       <StatusBadge status={status} color={event.color} accent={event.accent} />
 
-      {/* Icon */}
       <div style={{ marginBottom: 12 }}>
         <img src={event.icon} alt={event.codename} style={{ height: isMobile ? 40 : 48, width: "auto", marginLeft: (isMobile || isLeft) ? 0 : "auto", marginRight: (isMobile || isLeft) ? "auto" : 0, display: "block", filter: isDone ? `grayscale(0.4)` : `drop-shadow(0 0 12px ${event.color}75)`, opacity: isDone ? 0.55 : 1, transform: hovered ? "scale(1.06)" : "scale(1)", transition: "transform 0.35s ease" }} />
       </div>
 
-      {/* Floor badge */}
       <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: event.color + "22", border: `1px solid ${event.color}55`, borderRadius: 20, padding: "4px 12px", marginBottom: 10 }}>
         <span style={{ width: 6, height: 6, borderRadius: "50%", background: event.accent, boxShadow: `0 0 8px ${event.accent}`, display: "block" }} />
         <span style={{ color: event.accent, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "'DM Mono', monospace" }}>{event.floor}</span>
       </div>
 
-      {/* Title */}
       <h3 style={{ color: isDone ? "rgba(255,255,255,0.45)" : "#fff", fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: isMobile ? "clamp(20px, 5.5vw, 26px)" : "clamp(22px, 3.5vw, 30px)", letterSpacing: "0.05em", margin: "0 0 6px", lineHeight: 1.15, textShadow: hovered && !isDone ? `0 0 24px ${event.color}65` : "none", transition: "text-shadow 0.3s ease" }}>{event.title}</h3>
 
-      {/* Venue */}
       <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 12.5, margin: "0 0 12px", fontFamily: "'DM Mono', monospace" }}>{event.venue}</p>
 
-      {/* Time */}
       <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.11)", borderRadius: 10, padding: "6px 14px" }}>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={isDone ? "rgba(255,255,255,0.3)" : event.color} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span style={{ color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)", fontSize: 13, fontWeight: 600, fontFamily: "'DM Mono', monospace", letterSpacing: "0.04em" }}>{event.time}</span>
       </div>
 
-      {/* Coordinator */}
       <CoordinatorInfo coordinator={event.coordinator} color={event.color} accent={event.accent} isDone={isDone} />
 
-      {/* Photo strip */}
       {images.length > 0 && (
         <PhotoStrip images={images} color={event.color} accent={event.accent} onOpen={(idx) => onOpenGallery(event, images, idx)} />
       )}
@@ -647,7 +385,7 @@ function CardBody({ event, isLeft, isMobile, onOpenGallery }) {
 
 // ── Desktop Event Card ─────────────────────────────────────
 
-function EventCard({ event, index, onOpenGallery }) {
+function EventCard({ event, index, onOpenGallery, bubbleRef }) {
   const [ref, visible] = useInView(0.08);
   const [hovered, setHovered] = useState(false);
   const isLeft = index % 2 === 0;
@@ -655,34 +393,19 @@ function EventCard({ event, index, onOpenGallery }) {
   const isDone = status === "done";
 
   return (
-    <div
-      ref={ref}
-      style={{
-        display: "flex", alignItems: "center",
-        flexDirection: isLeft ? "row" : "row-reverse",
-        opacity: visible ? (isDone ? 0.65 : 1) : 0,
-        transform: visible ? "translateX(0)" : isLeft ? "translateX(-60px)" : "translateX(60px)",
-        transition: `opacity 0.65s ease ${index * 60}ms, transform 0.72s cubic-bezier(0.23,1,0.32,1) ${index * 60}ms`,
-        filter: isDone ? "grayscale(0.22)" : "none", gap: 0, minHeight: 160,
-      }}
-    >
-      {/* Illustration */}
+    <div ref={ref} style={{ display: "flex", alignItems: "center", flexDirection: isLeft ? "row" : "row-reverse", opacity: visible ? (isDone ? 0.65 : 1) : 0, transform: visible ? "translateX(0)" : isLeft ? "translateX(-60px)" : "translateX(60px)", transition: `opacity 0.65s ease ${index * 60}ms, transform 0.72s cubic-bezier(0.23,1,0.32,1) ${index * 60}ms`, filter: isDone ? "grayscale(0.22)" : "none", gap: 0, minHeight: 160 }}>
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: isLeft ? "flex-end" : "flex-start", paddingRight: isLeft ? 36 : 0, paddingLeft: isLeft ? 0 : 36 }}>
         <div style={{ position: "relative", transform: hovered ? "scale(1.14) rotate(5deg)" : "scale(1)", transition: "transform 0.5s cubic-bezier(0.34,1.56,0.64,1)", filter: hovered ? `drop-shadow(0 14px 36px ${event.color}95)` : `drop-shadow(0 4px 14px ${event.color}35)` }}>
           <img src={event.illustration} alt={event.title} style={{ width: 380, height: 380, objectFit: "contain", display: "block", opacity: isDone ? 0.5 : 1 }} />
         </div>
       </div>
 
-      {/* Bubble */}
-      <div
-        style={{ display: "flex", alignItems: "center", flexShrink: 0 }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
+      {/* Bubble — bubbleRef attached here for dot measurement */}
+      <div ref={bubbleRef} style={{ display: "flex", alignItems: "center", flexShrink: 0 }}
+        onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
         <NumberBubble number={event.number} color={event.color} accent={event.accent} visible={visible} status={status} />
       </div>
 
-      {/* Card */}
       <div style={{ flex: 1, display: "flex", alignItems: "center", paddingLeft: isLeft ? 36 : 0, paddingRight: isLeft ? 0 : 36, justifyContent: isLeft ? "flex-start" : "flex-end" }}>
         <CardBody event={event} isLeft={isLeft} isMobile={false} onOpenGallery={onOpenGallery} />
       </div>
@@ -692,14 +415,15 @@ function EventCard({ event, index, onOpenGallery }) {
 
 // ── Mobile Event Card ──────────────────────────────────────
 
-function MobileEventCard({ event, index, onOpenGallery }) {
+function MobileEventCard({ event, index, onOpenGallery, bubbleRef }) {
   const [ref, visible] = useInView(0.06);
   const { status } = EVENT_STATUS[event.number] || { status: "upcoming" };
   const isDone = status === "done";
 
   return (
     <div ref={ref} style={{ display: "flex", flexDirection: "row", alignItems: "flex-start", gap: 14, opacity: visible ? (isDone ? 0.65 : 1) : 0, transform: visible ? "translateX(0)" : "translateX(-40px)", transition: `opacity 0.6s ease ${index * 55}ms, transform 0.65s cubic-bezier(0.23,1,0.32,1) ${index * 55}ms`, filter: isDone ? "grayscale(0.22)" : "none", paddingLeft: 4 }}>
-      <div style={{ flexShrink: 0, paddingTop: 4 }}>
+      {/* Bubble — bubbleRef attached here for dot measurement */}
+      <div ref={bubbleRef} style={{ flexShrink: 0, paddingTop: 4 }}>
         <NumberBubble number={event.number} color={event.color} accent={event.accent} visible={visible} status={status} />
       </div>
       <CardBody event={event} isLeft={true} isMobile={true} onOpenGallery={onOpenGallery} />
@@ -709,25 +433,80 @@ function MobileEventCard({ event, index, onOpenGallery }) {
 
 // ── Responsive wrapper ─────────────────────────────────────
 
-function ResponsiveCard({ event, index, onOpenGallery }) {
+function ResponsiveCard({ event, index, onOpenGallery, bubbleRef }) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth <= 640);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth <= 640);
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-  if (isMobile) return <MobileEventCard event={event} index={index} onOpenGallery={onOpenGallery} />;
-  return <EventCard event={event} index={index} onOpenGallery={onOpenGallery} />;
+  if (isMobile) return <MobileEventCard event={event} index={index} onOpenGallery={onOpenGallery} bubbleRef={bubbleRef} />;
+  return <EventCard event={event} index={index} onOpenGallery={onOpenGallery} bubbleRef={bubbleRef} />;
 }
 
-// ── Static Timeline Line ───────────────────────────────────
+// ── Timeline Line with event-aligned dots ─────────────────
 
-function TimelineLine() {
+function TimelineLine({ containerRef, bubbleRefs, isMobile }) {
+  const [dots, setDots] = useState([]);
+
+  useEffect(() => {
+    function measure() {
+      if (!containerRef.current) return;
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const measured = bubbleRefs
+        .map(ref => {
+          if (!ref.current) return null;
+          const rect = ref.current.getBoundingClientRect();
+          // vertical midpoint of the bubble, relative to timeline container top
+          return rect.top - containerRect.top + rect.height / 2;
+        })
+        .filter(v => v !== null);
+      setDots(measured);
+    }
+
+    // First measure after layout settles
+    const raf = requestAnimationFrame(() => setTimeout(measure, 150));
+
+    // Re-measure on resize
+    window.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", measure);
+    };
+  }, [containerRef, bubbleRefs, isMobile]);
+
   return (
-    <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 2, transform: "translateX(-50%)", background: "linear-gradient(180deg, #f5c84222, #f5c84255 20%, #e91e8c55 80%, #e91e8c22)", borderRadius: 2, pointerEvents: "none" }}>
-      {[10, 30, 50, 70, 90].map(pct => (
-        <div key={pct} style={{ position: "absolute", top: `${pct}%`, left: "50%", transform: "translate(-50%, -50%)", width: 5, height: 5, borderRadius: "50%", background: "rgba(245,200,66,0.35)", boxShadow: "0 0 6px rgba(245,200,66,0.4)" }} />
-      ))}
+    <div style={{
+      position: "absolute",
+      // Left edge: 10% on mobile (aligns with bubble column), 50% on desktop (center)
+      left: isMobile ? "10%" : "50%",
+      top: 0,
+      bottom: 0,
+      width: 2,
+      transform: "translateX(-50%)",
+      background: "linear-gradient(180deg, #f5c84222, #f5c84255 20%, #e91e8c55 80%, #e91e8c22)",
+      borderRadius: 2,
+      pointerEvents: "none",
+    }}>
+      {dots.map((top, i) => {
+        const status = (EVENT_STATUS[events[i].number] || {}).status || "upcoming";
+        const isDone = status === "done";
+        return (
+          <div key={i} style={{
+            position: "absolute",
+            top,
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: isDone ? 5 : 7,
+            height: isDone ? 5 : 7,
+            borderRadius: "50%",
+            background: isDone ? "rgba(245,200,66,0.18)" : "rgba(245,200,66,0.65)",
+            boxShadow: isDone ? "none" : "0 0 10px rgba(245,200,66,0.7), 0 0 3px rgba(245,200,66,0.9)",
+            transition: "top 0.4s ease",
+            zIndex: 2,
+          }} />
+        );
+      })}
     </div>
   );
 }
@@ -737,6 +516,19 @@ function TimelineLine() {
 export default function EventList() {
   const [mounted, setMounted] = useState(false);
   const [gallery, setGallery] = useState(null);
+  const [isMobile, setIsMobile] = useState(() => typeof window !== "undefined" && window.innerWidth <= 640);
+
+  // One stable ref object per event, for bubble measurement
+  // Store the array itself in state so it's never accessed during render via .current
+  const [bubbleRefs] = useState(() => events.map(() => ({ current: null })));
+  // Ref for the timeline container
+  const timelineContainerRef = useRef(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => { setTimeout(() => setMounted(true), 80); }, []);
 
@@ -761,12 +553,7 @@ export default function EventList() {
       `}</style>
 
       {gallery && (
-        <GalleryOverlay
-          event={gallery.event}
-          images={gallery.images}
-          startIndex={gallery.startIndex}
-          onClose={closeGallery}
-        />
+        <GalleryOverlay event={gallery.event} images={gallery.images} startIndex={gallery.startIndex} onClose={closeGallery} />
       )}
 
       <section style={{ position: "relative", padding: "90px 20px 110px", overflow: "hidden", background: "radial-gradient(ellipse at 30% 50%, #0d2a4a 0%, #081525 40%, #050e1a 100%)" }}>
@@ -796,11 +583,21 @@ export default function EventList() {
         </div>
 
         {/* Timeline */}
-        <div style={{ maxWidth: 1100, margin: "0 auto", position: "relative" }}>
-          <TimelineLine />
+        <div ref={timelineContainerRef} style={{ maxWidth: 1100, margin: "0 auto", position: "relative" }}>
+          <TimelineLine
+            containerRef={timelineContainerRef}
+            bubbleRefs={bubbleRefs}
+            isMobile={isMobile}
+          />
           <div style={{ display: "flex", flexDirection: "column", gap: 64 }}>
             {events.map((event, i) => (
-              <ResponsiveCard key={event.number} event={event} index={i} onOpenGallery={openGallery} />
+              <ResponsiveCard
+                key={event.number}
+                event={event}
+                index={i}
+                onOpenGallery={openGallery}
+                bubbleRef={bubbleRefs[i]}
+              />
             ))}
           </div>
         </div>
