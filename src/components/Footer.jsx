@@ -1,4 +1,4 @@
-import { Globe, Phone, Mail } from "lucide-react";
+import { Globe, Phone, Mail, ClipboardList } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -31,6 +31,31 @@ export default function Footer() {
           <a href="mailto:mgmecudupi@gmail.com" className="flex items-center gap-1 hover:text-yellow-400 transition-colors">
             <Mail size={12} /> mgmecudupi@gmail.com
           </a>
+        </div>
+
+        {/* Feedback Form */}
+        <div className="mb-6">
+          <a
+            href="https://docs.google.com/forms/d/1JzPMP9ByVBQX8hoUEtBUc91nWd31EvYzcj_8aRVFfv8/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-105"
+            style={{
+              background: "linear-gradient(135deg, rgba(245,200,66,0.15), rgba(245,200,66,0.06))",
+              border: "1px solid rgba(245,200,66,0.4)",
+              color: "#f5c842",
+              boxShadow: "0 0 18px rgba(245,200,66,0.08)",
+              textDecoration: "none",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = "linear-gradient(135deg, rgba(245,200,66,0.25), rgba(245,200,66,0.12))"; e.currentTarget.style.boxShadow = "0 0 28px rgba(245,200,66,0.22)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg, rgba(245,200,66,0.15), rgba(245,200,66,0.06))"; e.currentTarget.style.boxShadow = "0 0 18px rgba(245,200,66,0.08)"; }}
+          >
+            <ClipboardList size={14} />
+            Share Your Feedback
+          </a>
+          <p className="text-white/25 text-xs mt-2 tracking-wide">
+            We'd love to hear what you think about Beyond The Scroll
+          </p>
         </div>
 
         <div className="border-t border-white/10 pt-4">
