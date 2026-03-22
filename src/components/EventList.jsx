@@ -23,14 +23,14 @@ const EVENT_STATUS = {
 // ============================================================
 
 const events = [
-  { number: 1, codename: "THINKFEED", title: "Paper Presentation", venue: "Conference Hall", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#1abc9c", accent: "#0ef5c8", icon: "/icons/thinkfeed.png", illustration: "/icons/paperpresentation.png" },
-  { number: 2, codename: "COMMENT WARS", title: "Debate", venue: "Main Hall", time: "10.30 AM – 12.00 PM", floor: "Third Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/commentwar.png", illustration: "/icons/debate.png" },
-  { number: 3, codename: "BUZZ BUILDERS", title: "Social Media Marketing Campaign", venue: "Room No. 1", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#3498db", accent: "#72c6ff", icon: "/icons/buzzbuilders.png", illustration: "/icons/socialmediamarketing campaighn.png" },
-  { number: 4, codename: "PIXEL IMPACT", title: "Digital Poster Design", venue: "Computer Lab 2", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/pixelimpact.png", illustration: "/icons/digitalposterdesign.png" },
-  { number: 5, codename: "SAY IT SMART", title: "Caption Writing Contest", venue: "Computer Lab 3", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#f39c12", accent: "#ffd166", icon: "/icons/sayitsmart.png", illustration: "/icons/captionwritingcontest.png" },
-  { number: 6, codename: "60 SECONDS FAME", title: "Reel Making", venue: "Computer Lab 2", time: "3.00 PM – 4.00 PM", floor: "Second Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/fame.png", illustration: "/icons/reelmaking.png" },
-  { number: 7, codename: "DIGITAL ECHOES", title: "Short Film Making", venue: "Main Hall", time: "1.30 PM – 2.30 PM", floor: "Third Floor", color: "#2ecc71", accent: "#7fffb2", icon: "/icons/digitalechoes.png", illustration: "/icons/shortfilm making.png" },
-  { number: 8, codename: "VIRAL TO REAL", title: "Cultural Showdown", venue: "Main Hall", time: "2.30 PM – 3.30 PM", floor: "Third Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/viraltoreal.png", illustration: "/icons/culturalshowdown.png" },
+  { number: 1, codename: "THINKFEED", title: "Paper Presentation", venue: "Conference Hall", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#1abc9c", accent: "#0ef5c8", icon: "/icons/thinkfeed.png", illustration: "/icons/paperpresentation.png", coordinator: { name: "Mr. Yaseen Manna", phone: "7349684211" } },
+  { number: 2, codename: "COMMENT WARS", title: "Debate", venue: "Main Hall", time: "10.30 AM – 12.00 PM", floor: "Third Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/commentwar.png", illustration: "/icons/debate.png", coordinator: { name: "Ms. Kavyashree", phone: "9632561285" } },
+  { number: 3, codename: "BUZZ BUILDERS", title: "Social Media Marketing Campaign", venue: "Room No. 1", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#3498db", accent: "#72c6ff", icon: "/icons/buzzbuilders.png", illustration: "/icons/socialmediamarketing campaighn.png", coordinator: { name: "Mr. Sanath Kotian", phone: "8618051932" } },
+  { number: 4, codename: "PIXEL IMPACT", title: "Digital Poster Design", venue: "Computer Lab 2", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/pixelimpact.png", illustration: "/icons/digitalposterdesign.png", coordinator: { name: "Ms. Anvitha R.B.", phone: "7996806937" } },
+  { number: 5, codename: "SAY IT SMART", title: "Caption Writing Contest", venue: "Computer Lab 3", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#f39c12", accent: "#ffd166", icon: "/icons/sayitsmart.png", illustration: "/icons/captionwritingcontest.png", coordinator: { name: "Ms. Akshatha Nayak", phone: "9380703282" } },
+  { number: 6, codename: "60 SECONDS FAME", title: "Reel Making", venue: "Computer Lab 2", time: "3.00 PM – 4.00 PM", floor: "Second Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/fame.png", illustration: "/icons/reelmaking.png", coordinator: { name: "Ms. Nayana Naik", phone: "7338621700" } },
+  { number: 7, codename: "DIGITAL ECHOES", title: "Short Film Making", venue: "Main Hall", time: "1.30 PM – 2.30 PM", floor: "Third Floor", color: "#2ecc71", accent: "#7fffb2", icon: "/icons/digitalechoes.png", illustration: "/icons/shortfilm making.png", coordinator: { name: "Mr. Stalin D'Souza", phone: "9620835114" } },
+  { number: 8, codename: "VIRAL TO REAL", title: "Cultural Showdown", venue: "Main Hall", time: "2.30 PM – 3.30 PM", floor: "Third Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/viraltoreal.png", illustration: "/icons/culturalshowdown.png", coordinator: { name: "Ms. Varshini Kotian", phone: "8618783355" } },
 ];
 
 // ── Hooks ──────────────────────────────────────────────────
@@ -519,6 +519,64 @@ function NumberBubble({ number, color, accent, visible, status }) {
   );
 }
 
+// ── Coordinator Info ───────────────────────────────────────
+
+function CoordinatorInfo({ coordinator, color, accent, isDone }) {
+  if (!coordinator) return null;
+  return (
+    <div style={{
+      marginTop: 14,
+      display: "flex", alignItems: "center", gap: 10,
+      background: `linear-gradient(135deg, ${color}14, ${color}07)`,
+      border: `1px solid ${color}33`,
+      borderRadius: 10, padding: "8px 14px",
+    }}>
+      {/* Person icon */}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isDone ? "rgba(255,255,255,0.3)" : accent} strokeWidth="2.2" style={{ flexShrink: 0 }}>
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <div style={{ display: "flex", flexDirection: "column", gap: 1, minWidth: 0 }}>
+        <span style={{
+          fontFamily: "'DM Mono', monospace", fontSize: 10,
+          color: isDone ? "rgba(255,255,255,0.25)" : accent,
+          letterSpacing: "0.14em", textTransform: "uppercase",
+        }}>Faculty Coordinator</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+          <span style={{
+            fontFamily: "'DM Mono', monospace", fontSize: 12.5, fontWeight: 500,
+            color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)",
+            whiteSpace: "nowrap",
+          }}>{coordinator.name}</span>
+          <a
+            href={`tel:${coordinator.phone}`}
+            onClick={e => e.stopPropagation()}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 5,
+              fontFamily: "'DM Mono', monospace", fontSize: 11.5,
+              color: isDone ? "rgba(255,255,255,0.3)" : color,
+              textDecoration: "none",
+              background: `${color}20`,
+              border: `1px solid ${color}44`,
+              borderRadius: 6, padding: "2px 8px",
+              transition: "all 0.22s ease",
+              pointerEvents: isDone ? "none" : "auto",
+              whiteSpace: "nowrap",
+            }}
+            onMouseEnter={e => { if (!isDone) { e.currentTarget.style.background = `${color}38`; e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; } }}
+            onMouseLeave={e => { e.currentTarget.style.background = `${color}20`; e.currentTarget.style.boxShadow = "none"; }}
+          >
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/>
+            </svg>
+            {coordinator.phone}
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Shared Card Body ───────────────────────────────────────
 
 function CardBody({ event, isLeft, isMobile, onOpenGallery }) {
@@ -575,6 +633,9 @@ function CardBody({ event, isLeft, isMobile, onOpenGallery }) {
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={isDone ? "rgba(255,255,255,0.3)" : event.color} strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         <span style={{ color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)", fontSize: 13, fontWeight: 600, fontFamily: "'DM Mono', monospace", letterSpacing: "0.04em" }}>{event.time}</span>
       </div>
+
+      {/* Coordinator */}
+      <CoordinatorInfo coordinator={event.coordinator} color={event.color} accent={event.accent} isDone={isDone} />
 
       {/* Photo strip */}
       {images.length > 0 && (
