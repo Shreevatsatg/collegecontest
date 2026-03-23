@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 // ============================================================
 // 🎯 SESSION DAY CONTROLS — EDIT THIS SECTION ON EVENT DAY
@@ -10,7 +11,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 // ============================================================
 const SESSION_STATUS = {
   1: { status: "done", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
-  2: { status: "upcoming", images: [] },
+  2: { status: "ongoing", images: [] },
   3: { status: "upcoming", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
@@ -209,6 +210,7 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const touchStartX = useRef(null);
+  const scrollerRef = useRef(null);
 
   useEffect(() => {
     requestAnimationFrame(() => setOverlayVisible(true));
@@ -217,16 +219,9 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
   }, []);
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "ArrowRight") navigate("right");
-      else if (e.key === "ArrowLeft") navigate("left");
-      else if (e.key === "Escape") handleClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  });
-
-  const handleClose = () => { setOverlayVisible(false); setTimeout(onClose, 380); };
+    if (!overlayVisible) return;
+    if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
+  }, [overlayVisible]);
 
   const navigate = useCallback((dir) => {
     if (isAnimating || images.length < 2) return;
@@ -246,6 +241,18 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
     }, 320);
   }, [isAnimating, current, images.length]);
 
+  const handleClose = useCallback(() => { setOverlayVisible(false); setTimeout(onClose, 380); }, [onClose]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") navigate("right");
+      else if (e.key === "ArrowLeft") navigate("left");
+      else if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [handleClose, navigate]);
+
   const getImageStyle = () => {
     const base = { transition: "none", willChange: "transform, opacity" };
     switch (slideState) {
@@ -258,8 +265,8 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
     }
   };
 
-  return (
-    <div onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 9999, background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)", backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)", transition: "background 0.38s ease, backdrop-filter 0.38s ease", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+  const overlay = (
+    <div ref={scrollerRef} onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 9999, background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)", backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)", transition: "background 0.38s ease, backdrop-filter 0.38s ease", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "86px 16px 32px", overflowY: "auto" }}>
       {/* Header bar */}
       <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%)", transform: overlayVisible ? "translateY(0)" : "translateY(-24px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.48s cubic-bezier(0.23,1,0.32,1) 0.08s", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -292,8 +299,8 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
           touchStartX.current = null;
         }}
         style={{ position: "relative", width: "min(94vw, 1040px)", borderRadius: 22, overflow: "hidden", transform: overlayVisible ? "scale(1) translateY(0)" : "scale(0.86) translateY(36px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.05s", boxShadow: `0 0 0 1px ${session.color}44, 0 50px 120px rgba(0,0,0,0.85)`, userSelect: "none" }}>
-        <div style={{ position: "relative", width: "100%", paddingBottom: "60%", background: "#050c18", overflow: "hidden" }}>
-          <img key={displayIndex} src={images[displayIndex]} alt={`${session.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", ...getImageStyle() }} />
+        <div style={{ position: "relative", width: "100%", height: "min(72vh, 700px)", background: "#050c18", overflow: "hidden" }}>
+          <img key={displayIndex} src={images[displayIndex]} alt={`${session.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", ...getImageStyle() }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 35%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${session.color}, ${session.accent}, ${session.color}, transparent)` }} />
           {images.length > 1 && (<>
@@ -329,21 +336,30 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(overlay, document.body);
 }
 
 // ── Poster Lightbox ────────────────────────────────────────
 function PosterLightbox({ session, onClose }) {
   const [vis, setVis] = useState(false);
+  const scrollerRef = useRef(null);
   useEffect(() => {
     requestAnimationFrame(() => setVis(true));
     document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
   }, []);
+
+  useEffect(() => {
+    if (!vis) return;
+    if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
+  }, [vis]);
   const close = () => { setVis(false); setTimeout(onClose, 320); };
-  return (
-    <div onClick={close} style={{ position: "fixed", inset: 0, zIndex: 9999, background: vis ? "rgba(3,8,18,0.96)" : "rgba(3,8,18,0)", backdropFilter: vis ? "blur(24px)" : "blur(0px)", transition: "all 0.32s ease", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
-      <div onClick={e => e.stopPropagation()} style={{ position: "relative", maxWidth: "min(86vw, 440px)", width: "100%", transform: vis ? "scale(1) translateY(0)" : "scale(0.88) translateY(28px)", opacity: vis ? 1 : 0, transition: "all 0.42s cubic-bezier(0.23,1,0.32,1) 0.05s" }}>
-        <img src={session.poster} alt={session.title} style={{ width: "100%", height: "auto", borderRadius: 18, display: "block", boxShadow: `0 0 0 1px ${session.color}55, 0 40px 100px rgba(0,0,0,0.8), 0 0 60px ${session.color}22` }} />
+  const overlay = (
+    <div ref={scrollerRef} onClick={close} style={{ position: "fixed", inset: 0, zIndex: 9999, background: vis ? "rgba(3,8,18,0.96)" : "rgba(3,8,18,0)", backdropFilter: vis ? "blur(24px)" : "blur(0px)", transition: "all 0.32s ease", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px", overflowY: "auto" }}>
+      <div onClick={e => e.stopPropagation()} style={{ position: "relative", width: "min(92vw, 1000px)", height: "min(86vh, 720px)", overflow: "hidden", borderRadius: 18, background: "#050c18", transform: vis ? "scale(1) translateY(0)" : "scale(0.88) translateY(28px)", opacity: vis ? 1 : 0, transition: "all 0.42s cubic-bezier(0.23,1,0.32,1) 0.05s" }}>
+        <img src={session.poster} alt={session.title} style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 18, display: "block", boxShadow: `0 0 0 1px ${session.color}55, 0 40px 100px rgba(0,0,0,0.8), 0 0 60px ${session.color}22` }} />
         <button onClick={close} style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,0.65)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "50%", width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "rgba(255,255,255,0.72)", fontSize: 17 }}>✕</button>
         {/* Bottom label */}
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 18px 18px", background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%)", borderRadius: "0 0 18px 18px", pointerEvents: "none" }}>
@@ -354,6 +370,9 @@ function PosterLightbox({ session, onClose }) {
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(overlay, document.body);
 }
 
 // ── Photo Strip ────────────────────────────────────────────
