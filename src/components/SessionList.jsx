@@ -9,7 +9,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 //   1: { status: "done", images: ["/photos/design-journey-1.jpg"] },
 // ============================================================
 const SESSION_STATUS = {
-  1: { status: "upcoming", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
+  1: { status: "done", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
   2: { status: "upcoming", images: [] },
   3: { status: "upcoming", images: [] },
   4: { status: "upcoming", images: [] },
