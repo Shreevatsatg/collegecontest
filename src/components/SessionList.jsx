@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 // ============================================================
 const SESSION_STATUS = {
   1: { status: "done", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
-  2: { status: "ongoing", images: [] },
+  2: { status: "ongoing", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
   3: { status: "upcoming", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
