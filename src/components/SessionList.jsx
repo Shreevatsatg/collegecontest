@@ -302,7 +302,7 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
       )}
 
       <div style={{ marginTop: 16, fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.18)", letterSpacing: "0.14em", textTransform: "uppercase", opacity: overlayVisible ? 1 : 0, transition: "opacity 0.5s ease 0.28s" }}>
-        {images.length > 1 ? "← → keys · swipe · tap outside to close" : "tap outside to close"}
+        {images.length > 1 ? "← → swipe · tap outside to close" : "tap outside to close"}
       </div>
     </div>
   );
