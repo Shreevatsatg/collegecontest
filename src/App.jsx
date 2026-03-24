@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import HeroSection from "./components/HeroSection";
 import EventsWrapper from "./components/EventsWrapper";
 import Footer from "./components/Footer";
+import Launch from "./components/Launch";
 
 export default function App() {
   const [scrollY, setScrollY] = useState(0);
@@ -14,9 +16,19 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0a1628] text-white overflow-x-hidden">
-      <HeroSection scrollY={scrollY} />
-      <EventsWrapper />
-      <Footer />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <HeroSection scrollY={scrollY} />
+              <EventsWrapper />
+              <Footer />
+            </>
+          }
+        />
+        <Route path="/launch" element={<Launch />} />
+      </Routes>
     </div>
   );
 }

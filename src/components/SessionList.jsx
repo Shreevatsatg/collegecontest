@@ -628,8 +628,6 @@ export default function SessionList() {
         {[{top:"6%",right:"2%",w:360,c:"#f39c12",d:"4.5s",dl:"0.3s"},{top:"44%",left:"1%",w:300,c:"#9b59b6",d:"5.5s",dl:"1s"},{bottom:"10%",right:"5%",w:250,c:"#1abc9c",d:"6s",dl:"2s"}].map((b,i)=>(
           <div key={i} style={{position:"absolute",top:b.top,left:b.left,right:b.right,bottom:b.bottom,width:b.w,height:b.w,borderRadius:"50%",background:`radial-gradient(circle,${b.c}12,transparent 70%)`,animation:`pulse-glow ${b.d} ease-in-out infinite ${b.dl}`,pointerEvents:"none"}}/>
         ))}
-        <div style={{position:"absolute",top:0,right:0,width:72,height:72,borderTop:"2px solid #f5c84260",borderRight:"2px solid #f5c84260"}}/>
-        <div style={{position:"absolute",bottom:0,left:0,width:72,height:72,borderBottom:"2px solid #f5c84260",borderLeft:"2px solid #f5c84260"}}/>
 
         {/* Header */}
         <div style={{textAlign:"center",marginBottom:60,opacity:mounted?1:0,transform:mounted?"translateY(0)":"translateY(-26px)",transition:"all 0.9s cubic-bezier(0.23,1,0.32,1)"}}>

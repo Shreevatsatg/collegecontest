@@ -14,6 +14,7 @@
 import { useState, useEffect, useRef } from "react";
 import EventList from "./EventList";       // your existing component
 import SessionList from "./SessionList";   // new component
+import CeremonyList from "./CeremonyList"; // ceremonies component
 
 // ── Tab config ─────────────────────────────────────────────
 const TABS = [
@@ -179,9 +180,11 @@ function SlideTransition({ activeIndex, children }) {
   const [displayIndex, setDisplayIndex] = useState(activeIndex);
   const [animState, setAnimState] = useState("idle"); // "idle" | "exit" | "enter"
   const prevIndex = useRef(activeIndex);
+  const direction = useRef(1);
 
   useEffect(() => {
     if (activeIndex === prevIndex.current) return;
+    direction.current = activeIndex > prevIndex.current ? 1 : -1;
     setAnimState("exit");
     const t1 = setTimeout(() => {
       setDisplayIndex(activeIndex);
@@ -196,18 +199,18 @@ function SlideTransition({ activeIndex, children }) {
   }, [activeIndex]);
 
   const getStyle = () => {
-    const dir = activeIndex > prevIndex.current ? 1 : -1;
+    const d = direction.current;
     switch (animState) {
       case "exit":
         return {
           opacity: 0,
-          transform: `translateX(${dir * -3}%) scale(0.985)`,
+          transform: `translateX(${d * -3}%) scale(0.985)`,
           transition: "opacity 0.26s ease, transform 0.26s ease",
         };
       case "enter":
         return {
           opacity: 0,
-          transform: `translateX(${dir * 3}%)`,
+          transform: `translateX(${d * 3}%)`,
           transition: "none",
         };
       case "idle":
@@ -241,6 +244,9 @@ export default function EventsWrapper() {
         @keyframes tabFadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
       `}</style>
 
+      {/* Ceremony Section */}
+      <CeremonyList />
+
       {/* Tab nav — sits between HeroSection and the content sections */}
       <div style={{
         position: "sticky", top: 0, zIndex: 100,
@@ -259,6 +265,8 @@ export default function EventsWrapper() {
         <EventList />
         <SessionList />
       </SlideTransition>
+      {/* Valedictory Ceremony */}
+      <CeremonyList type="bottom" />
     </>
   );
 }
