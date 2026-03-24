@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import HeroSection from "./components/HeroSection";
-import EventList from "./components/EventList";
+import EventsWrapper from "./components/EventsWrapper";
 import Footer from "./components/Footer";
 
 export default function App() {
@@ -15,7 +15,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#0a1628] text-white overflow-x-hidden">
       <HeroSection scrollY={scrollY} />
-      <EventList />
+      <EventsWrapper />
       <Footer />
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 // ============================================================
 // 🎯 EVENT DAY CONTROLS — EDIT THIS SECTION ON EVENT DAY
@@ -78,6 +79,7 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
+  const scrollerRef = useRef(null);
 
   useEffect(() => {
     requestAnimationFrame(() => setOverlayVisible(true));
@@ -86,19 +88,9 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
   }, []);
 
   useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "ArrowRight") navigate("right");
-      else if (e.key === "ArrowLeft") navigate("left");
-      else if (e.key === "Escape") handleClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  });
-
-  const handleClose = () => {
-    setOverlayVisible(false);
-    setTimeout(onClose, 380);
-  };
+    if (!overlayVisible) return;
+    if (scrollerRef.current) scrollerRef.current.scrollTop = 0;
+  }, [overlayVisible]);
 
   const navigate = useCallback((dir) => {
     if (isAnimating || images.length < 2) return;
@@ -119,6 +111,21 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
       });
     }, 320);
   }, [isAnimating, current, images.length]);
+
+  const handleClose = useCallback(() => {
+    setOverlayVisible(false);
+    setTimeout(onClose, 380);
+  }, [onClose]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowRight") navigate("right");
+      else if (e.key === "ArrowLeft") navigate("left");
+      else if (e.key === "Escape") handleClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [handleClose, navigate]);
 
   const onTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
@@ -144,8 +151,8 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
     }
   };
 
-  return (
-    <div onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 9999, background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)", backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)", transition: "background 0.38s ease, backdrop-filter 0.38s ease", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+  const overlay = (
+    <div ref={scrollerRef} onClick={handleClose} style={{ position: "fixed", inset: 0, zIndex: 9999, background: overlayVisible ? "rgba(3,8,18,0.97)" : "rgba(3,8,18,0)", backdropFilter: overlayVisible ? "blur(28px)" : "blur(0px)", transition: "background 0.38s ease, backdrop-filter 0.38s ease", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "86px 16px 32px", overflowY: "auto" }}>
       <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "linear-gradient(180deg, rgba(0,0,0,0.75) 0%, transparent 100%)", transform: overlayVisible ? "translateY(0)" : "translateY(-24px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.48s cubic-bezier(0.23,1,0.32,1) 0.08s", zIndex: 10 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ width: 40, height: 40, borderRadius: "50%", background: `radial-gradient(circle at 35% 35%, ${event.accent}, ${event.color})`, boxShadow: `0 0 20px ${event.color}99`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: 20, color: "#fff", fontWeight: 900, flexShrink: 0 }}>{event.number}</div>
@@ -167,8 +174,8 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
 
       <div onClick={e => e.stopPropagation()} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
         style={{ position: "relative", width: "min(94vw, 1040px)", borderRadius: 22, overflow: "hidden", transform: overlayVisible ? "scale(1) translateY(0)" : "scale(0.86) translateY(36px)", opacity: overlayVisible ? 1 : 0, transition: "all 0.52s cubic-bezier(0.23,1,0.32,1) 0.05s", boxShadow: `0 0 0 1px ${event.color}44, 0 50px 120px rgba(0,0,0,0.85), 0 0 80px ${event.color}1a`, userSelect: "none" }}>
-        <div style={{ position: "relative", width: "100%", paddingBottom: "60%", background: "#050c18", overflow: "hidden" }}>
-          <img key={displayIndex} src={images[displayIndex]} alt={`${event.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", ...getImageStyle() }} />
+        <div style={{ position: "relative", width: "100%", height: "min(72vh, 700px)", background: "#050c18", overflow: "hidden" }}>
+          <img key={displayIndex} src={images[displayIndex]} alt={`${event.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", ...getImageStyle() }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 35%, transparent 75%, rgba(0,0,0,0.25) 100%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "22%", background: "linear-gradient(90deg, rgba(0,0,0,0.28), transparent)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "22%", background: "linear-gradient(270deg, rgba(0,0,0,0.28), transparent)", pointerEvents: "none" }} />
@@ -209,6 +216,9 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
       </div>
     </div>
   );
+
+  if (typeof document === "undefined") return null;
+  return createPortal(overlay, document.body);
 }
 
 function GalleryNavArrow({ dir, color, accent, onClick }) {
@@ -323,7 +333,7 @@ function CoordinatorInfo({ coordinator, color, accent, isDone }) {
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12.5, fontWeight: 500, color: isDone ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.88)", whiteSpace: "nowrap" }}>{coordinator.name}</span>
           <a href={`tel:${coordinator.phone}`} onClick={e => e.stopPropagation()}
-            style={{ display: "inline-flex", alignItems: "center", gap: 5, fontFamily: "'DM Mono', monospace", fontSize: 11.5, color: isDone ? "rgba(255,255,255,0.3)" : color, textDecoration: "none", background: `${color}20`, border: `1px solid ${color}44`, borderRadius: 6, padding: "2px 8px", transition: "all 0.22s ease", pointerEvents: isDone ? "none" : "auto", whiteSpace: "nowrap" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 5, fontFamily: "'DM Mono', monospace", fontSize: 11.5, color: isDone ? "rgba(255,255,255,0.3)" : color, textDecoration: "none", background: `${color}20`, border: `1px solid ${color}44`, borderRadius: 6, padding: "2px 8px", transition: "all 0.22s ease", pointerEvents: "auto", cursor: "pointer", whiteSpace: "nowrap" }}
             onMouseEnter={e => { if (!isDone) { e.currentTarget.style.background = `${color}38`; e.currentTarget.style.boxShadow = `0 0 12px ${color}44`; } }}
             onMouseLeave={e => { e.currentTarget.style.background = `${color}20`; e.currentTarget.style.boxShadow = "none"; }}
           >
