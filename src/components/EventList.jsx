@@ -184,7 +184,6 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}>{event.title.toUpperCase()}</div>
           </div>
         </div>
-        {images.length > 1 && (<><GalleryNavArrow dir="left" color={event.color} accent={event.accent} onClick={() => navigate("left")} /><GalleryNavArrow dir="right" color={event.color} accent={event.accent} onClick={() => navigate("right")} /></>)}
       </div>
 
       {images.length > 1 && (
@@ -219,15 +218,6 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
 
   if (typeof document === "undefined") return null;
   return createPortal(overlay, document.body);
-}
-
-function GalleryNavArrow({ dir, color, accent, onClick }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <button onClick={e => { e.stopPropagation(); onClick(); }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ position: "absolute", top: "50%", [dir === "left" ? "left" : "right"]: 14, width: 50, height: 50, borderRadius: "50%", background: hov ? "rgba(0,0,0,0.78)" : "rgba(0,0,0,0.42)", backdropFilter: "blur(12px)", border: `1.5px solid ${hov ? color + "cc" : "rgba(255,255,255,0.15)"}`, boxShadow: hov ? `0 0 24px ${color}77` : "none", color: hov ? accent : "rgba(255,255,255,0.65)", fontSize: 26, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transform: `translateY(-50%) ${hov ? (dir === "left" ? "translateX(-4px)" : "translateX(4px)") : ""}`, transition: "all 0.26s cubic-bezier(0.34,1.56,0.64,1)", zIndex: 5 }}
-    >{dir === "left" ? "‹" : "›"}</button>
-  );
 }
 
 // ── Photo Preview Strip ────────────────────────────────────
