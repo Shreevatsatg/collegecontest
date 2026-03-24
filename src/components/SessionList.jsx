@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 // ============================================================
 const SESSION_STATUS = {
   1: { status: "done", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
-  2: { status: "ongoing", images: [] },
+  2: { status: "ongoing", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
   3: { status: "upcoming", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
@@ -176,32 +176,6 @@ function useInView(threshold = 0.05) {
   return [ref, visible];
 }
 
-// ── Gallery Nav Arrow ──────────────────────────────────────
-function GalleryNavArrow({ dir, color, accent, onClick }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <button
-      onClick={e => { e.stopPropagation(); onClick(); }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        position: "absolute", top: "50%",
-        [dir === "left" ? "left" : "right"]: 14,
-        width: 50, height: 50, borderRadius: "50%",
-        background: hov ? "rgba(0,0,0,0.78)" : "rgba(0,0,0,0.42)",
-        backdropFilter: "blur(12px)",
-        border: `1.5px solid ${hov ? color + "cc" : "rgba(255,255,255,0.15)"}`,
-        boxShadow: hov ? `0 0 24px ${color}77` : "none",
-        color: hov ? accent : "rgba(255,255,255,0.65)",
-        fontSize: 26, cursor: "pointer",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        transform: `translateY(-50%) ${hov ? (dir === "left" ? "translateX(-4px)" : "translateX(4px)") : ""}`,
-        transition: "all 0.26s cubic-bezier(0.34,1.56,0.64,1)", zIndex: 5,
-      }}
-    >{dir === "left" ? "‹" : "›"}</button>
-  );
-}
-
 // ── Gallery Overlay ────────────────────────────────────────
 function GalleryOverlay({ session, images, startIndex, onClose }) {
   const [current, setCurrent] = useState(startIndex || 0);
@@ -303,10 +277,6 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
           <img key={displayIndex} src={images[displayIndex]} alt={`${session.title} — photo ${displayIndex + 1}`} draggable={false} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", ...getImageStyle() }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 35%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, transparent, ${session.color}, ${session.accent}, ${session.color}, transparent)` }} />
-          {images.length > 1 && (<>
-            <GalleryNavArrow dir="left" color={session.color} accent={session.accent} onClick={() => navigate("left")} />
-            <GalleryNavArrow dir="right" color={session.color} accent={session.accent} onClick={() => navigate("right")} />
-          </>)}
         </div>
       </div>
 
@@ -332,7 +302,7 @@ function GalleryOverlay({ session, images, startIndex, onClose }) {
       )}
 
       <div style={{ marginTop: 16, fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.18)", letterSpacing: "0.14em", textTransform: "uppercase", opacity: overlayVisible ? 1 : 0, transition: "opacity 0.5s ease 0.28s" }}>
-        {images.length > 1 ? "← → keys · swipe · tap outside to close" : "tap outside to close"}
+        {images.length > 1 ? "← → swipe · tap outside to close" : "tap outside to close"}
       </div>
     </div>
   );

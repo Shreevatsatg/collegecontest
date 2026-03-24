@@ -27,8 +27,8 @@ const events = [
   { number: 1, codename: "THINKFEED", title: "Paper Presentation", venue: "Conference Hall", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#1abc9c", accent: "#0ef5c8", icon: "/icons/thinkfeed.png", illustration: "/icons/paperpresentation.png", coordinator: { name: "Mr. Yaseen Manna", phone: "7349684211" } },
   { number: 2, codename: "COMMENT WARS", title: "Debate", venue: "Main Hall", time: "10.30 AM – 12.00 PM", floor: "Third Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/commentwar.png", illustration: "/icons/debate.png", coordinator: { name: "Ms. Kavyashree", phone: "9632561285" } },
   { number: 3, codename: "BUZZ BUILDERS", title: "Social Media Marketing Campaign", venue: "Room No. 1", time: "11.30 AM – 1.30 PM", floor: "Ground Floor", color: "#3498db", accent: "#72c6ff", icon: "/icons/buzzbuilders.png", illustration: "/icons/socialmediamarketing campaighn.png", coordinator: { name: "Mr. Sanath Kotian", phone: "8618051932" } },
-  { number: 4, codename: "PIXEL IMPACT", title: "Digital Poster Design", venue: "Computer Lab 2", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/pixelimpact.png", illustration: "/icons/digitalposterdesign.png", coordinator: { name: "Ms. Anvitha R.B.", phone: "7996806937" } },
-  { number: 5, codename: "SAY IT SMART", title: "Caption Writing Contest", venue: "Computer Lab 3", time: "10.30 AM – 11.30 AM", floor: "Second Floor", color: "#f39c12", accent: "#ffd166", icon: "/icons/sayitsmart.png", illustration: "/icons/captionwritingcontest.png", coordinator: { name: "Ms. Akshatha Nayak", phone: "9380703282" } },
+  { number: 4, codename: "PIXEL IMPACT", title: "Digital Poster Design", venue: "Computer Lab 1", time: "10.30 AM – 11.30 AM", floor: "First Floor", color: "#e74c3c", accent: "#ff7b6b", icon: "/icons/pixelimpact.png", illustration: "/icons/digitalposterdesign.png", coordinator: { name: "Ms. Anvitha R.B.", phone: "7996806937" } },
+  { number: 5, codename: "SAY IT SMART", title: "Caption Writing Contest", venue: "Room No. 2", time: "10.30 AM – 11.30 AM", floor: "Ground Floor", color: "#f39c12", accent: "#ffd166", icon: "/icons/sayitsmart.png", illustration: "/icons/captionwritingcontest.png", coordinator: { name: "Ms. Akshatha Nayak", phone: "9380703282" } },
   { number: 6, codename: "60 SECONDS FAME", title: "Reel Making", venue: "Computer Lab 2", time: "3.00 PM – 4.00 PM", floor: "Second Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/fame.png", illustration: "/icons/reelmaking.png", coordinator: { name: "Ms. Nayana Naik", phone: "7338621700" } },
   { number: 7, codename: "DIGITAL ECHOES", title: "Short Film Making", venue: "Main Hall", time: "1.30 PM – 2.30 PM", floor: "Third Floor", color: "#2ecc71", accent: "#7fffb2", icon: "/icons/digitalechoes.png", illustration: "/icons/shortfilm making.png", coordinator: { name: "Mr. Stalin D'Souza", phone: "9620835114" } },
   { number: 8, codename: "VIRAL TO REAL", title: "Cultural Showdown", venue: "Main Hall", time: "2.30 PM – 3.30 PM", floor: "Third Floor", color: "#e91e8c", accent: "#ff6ec7", icon: "/icons/viraltoreal.png", illustration: "/icons/culturalshowdown.png", coordinator: { name: "Ms. Varshini Kotian", phone: "8618783355" } },
@@ -184,7 +184,6 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em" }}>{event.title.toUpperCase()}</div>
           </div>
         </div>
-        {images.length > 1 && (<><GalleryNavArrow dir="left" color={event.color} accent={event.accent} onClick={() => navigate("left")} /><GalleryNavArrow dir="right" color={event.color} accent={event.accent} onClick={() => navigate("right")} /></>)}
       </div>
 
       {images.length > 1 && (
@@ -212,22 +211,13 @@ function GalleryOverlay({ event, images, startIndex, onClose }) {
       )}
 
       <div style={{ marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.2)", letterSpacing: "0.16em", textTransform: "uppercase", opacity: overlayVisible ? 1 : 0, transition: "opacity 0.5s ease 0.28s" }}>
-        {images.length > 1 ? "← → keys · swipe · tap outside to close" : "tap outside to close"}
+        {images.length > 1 ? "← → swipe · tap outside to close" : "tap outside to close"}
       </div>
     </div>
   );
 
   if (typeof document === "undefined") return null;
   return createPortal(overlay, document.body);
-}
-
-function GalleryNavArrow({ dir, color, accent, onClick }) {
-  const [hov, setHov] = useState(false);
-  return (
-    <button onClick={e => { e.stopPropagation(); onClick(); }} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{ position: "absolute", top: "50%", [dir === "left" ? "left" : "right"]: 14, width: 50, height: 50, borderRadius: "50%", background: hov ? "rgba(0,0,0,0.78)" : "rgba(0,0,0,0.42)", backdropFilter: "blur(12px)", border: `1.5px solid ${hov ? color + "cc" : "rgba(255,255,255,0.15)"}`, boxShadow: hov ? `0 0 24px ${color}77` : "none", color: hov ? accent : "rgba(255,255,255,0.65)", fontSize: 26, lineHeight: 1, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transform: `translateY(-50%) ${hov ? (dir === "left" ? "translateX(-4px)" : "translateX(4px)") : ""}`, transition: "all 0.26s cubic-bezier(0.34,1.56,0.64,1)", zIndex: 5 }}
-    >{dir === "left" ? "‹" : "›"}</button>
-  );
 }
 
 // ── Photo Preview Strip ────────────────────────────────────
