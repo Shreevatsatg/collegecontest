@@ -560,8 +560,6 @@ export default function EventList() {
         {[{ top: "8%", left: "2%", w: 440, c: "#1abc9c", d: "4s", delay: "0s" }, { top: "42%", right: "2%", w: 380, c: "#e91e8c", d: "5s", delay: "1.2s" }, { bottom: "10%", left: "6%", w: 300, c: "#3498db", d: "6s", delay: "2s" }, { top: "72%", right: "12%", w: 240, c: "#f39c12", d: "7s", delay: "0.5s" }].map((b, i) => (
           <div key={i} style={{ position: "absolute", top: b.top, left: b.left, right: b.right, bottom: b.bottom, width: b.w, height: b.w, borderRadius: "50%", background: `radial-gradient(circle, ${b.c}14, transparent 70%)`, animation: `pulse-glow ${b.d} ease-in-out infinite ${b.delay}`, pointerEvents: "none" }} />
         ))}
-        <div style={{ position: "absolute", bottom: 0, left: 0, width: 90, height: 90, borderBottom: "2px solid #f5c84278", borderLeft: "2px solid #f5c84278" }} />
-        <div style={{ position: "absolute", bottom: 0, right: 0, width: 90, height: 90, borderBottom: "2px solid #f5c84278", borderRight: "2px solid #f5c84278" }} />
 
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 90, display: "flex", alignItems: "center", justifyContent: "center", gap: 48, flexWrap: "wrap", opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(-30px)", transition: "all 0.9s cubic-bezier(0.23,1,0.32,1)" }}>
@@ -569,7 +567,7 @@ export default function EventList() {
             <img src="/icons/bulb.png" alt="Logo" style={{ width: 200, height: 200, objectFit: "contain", filter: "drop-shadow(0 0 32px #f5c84275)" }} />
           </div>
           <div>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: "0.22em", color: "#f5c842", textTransform: "uppercase", margin: "0 0 10px" }}>— presents —</p>
+            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: "0.22em", color: "#f5c842", textTransform: "uppercase", margin: "0 0 10px" }}>— Competitions —</p>
             <h2 style={{ fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: "clamp(52px, 10vw, 104px)", margin: 0, letterSpacing: "0.06em", lineHeight: 1, background: "linear-gradient(135deg, #fff 35%, #f5c842 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Event List</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, justifyContent: "center", flexWrap: "wrap" }}>
               <div style={{ height: 1, width: 36, background: "linear-gradient(90deg, transparent, #f5c842)" }} />
