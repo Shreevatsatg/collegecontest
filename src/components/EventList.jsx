@@ -7,11 +7,11 @@ import { createPortal } from "react-dom";
 // STATUS options: "upcoming" | "ongoing" | "done"
 // To add images after event ends, add paths to `images` array
 // Example:
-//   3: { status: "done", images: ["/photos/buzzbuilders-1.jpg", "/photos/buzzbuilders-2.jpg"] },
+//   3: { status: "done", images: ["/images/competitions/buzzbuilders-1.jpg", "/images/competitions/buzzbuilders-2.jpg"] },
 // ============================================================
 const EVENT_STATUS = {
-  1: {  status: "done", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
-  2: { status: "ongoing", images: ["/images/IMG_20240516_222754_288.jpg","/images/IMG_20241105_102653.jpg"] },
+  1: { status: "upcoming", images: [] },
+  2: { status: "upcoming", images: [] },
   3: { status: "upcoming", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
