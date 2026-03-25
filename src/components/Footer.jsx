@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="max-w-2xl mx-auto">
         <div className="flex justify-center mb-4">
           <div className="w-12 h-12 rounded-full border border-yellow-white bg-white flex items-center justify-center">
-            <img src="/icons/college logo.png"></img>
+            <img className="ml-0 mr-0.75" src="/icons/college logo.png"></img>
           </div>
         </div>
 
