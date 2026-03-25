@@ -567,7 +567,7 @@ export default function EventList() {
             <img src="/icons/bulb.png" alt="Logo" style={{ width: 200, height: 200, objectFit: "contain", filter: "drop-shadow(0 0 32px #f5c84275)" }} />
           </div>
           <div>
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: "0.22em", color: "#f5c842", textTransform: "uppercase", margin: "0 0 10px" }}>— presents —</p>
+            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: "0.22em", color: "#f5c842", textTransform: "uppercase", margin: "0 0 10px" }}>— Competitions —</p>
             <h2 style={{ fontFamily: "'Bebas Neue', Impact, sans-serif", fontSize: "clamp(52px, 10vw, 104px)", margin: 0, letterSpacing: "0.06em", lineHeight: 1, background: "linear-gradient(135deg, #fff 35%, #f5c842 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Event List</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 14, justifyContent: "center", flexWrap: "wrap" }}>
               <div style={{ height: 1, width: 36, background: "linear-gradient(90deg, transparent, #f5c842)" }} />
