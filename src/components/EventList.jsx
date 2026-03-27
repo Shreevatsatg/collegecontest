@@ -12,11 +12,11 @@ import { createPortal } from "react-dom";
 const EVENT_STATUS = {
   1: { status: "done", images: ["/images/competitions/paperpresentation/pgoto1.png","/images/competitions/paperpresentation/photo2.png"] },
   2: { status: "done", images: [] },
-  3: { status: "done", images: [] },
+  3: { status: "done", images: ["/images/competitions/socialmediamarketing/photo1.jpg"] },
   4: { status: "done", images: [] },
   5: { status: "done", images: ["/images/competitions/caption writing/photo.jpg"] },
   6: { status: "ongoing", images: [] },
-  7: { status: "ongoing", images: [] },
+  7: { status: "done", images: [] },
   8: { status: "upcoming", images: [] },
 };
 // ============================================================
