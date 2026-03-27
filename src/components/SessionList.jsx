@@ -10,9 +10,9 @@ import { createPortal } from "react-dom";
 //   1: { status: "done", images: ["/images/sessions/design-journey-1.jpg"] },
 // ============================================================
 const SESSION_STATUS = {
-  1: { status: "upcoming", images: [] },
+  1: { status: "done", images: [] },
   2: { status: "upcoming", images: [] },
-  3: { status: "upcoming", images: [] },
+  3: { status: "done", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
   6: { status: "upcoming", images: [] },

@@ -14,7 +14,7 @@ const EVENT_STATUS = {
   2: { status: "ongoing", images: [] },
   3: { status: "ongoing", images: [] },
   4: { status: "ongoing", images: [] },
-  5: { status: "done", images: [] },
+  5: { status: "done", images: ["/images/competitions/caption writing/photo.jpg"] },
   6: { status: "upcoming", images: [] },
   7: { status: "upcoming", images: [] },
   8: { status: "upcoming", images: [] },
