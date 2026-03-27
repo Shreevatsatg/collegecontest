@@ -7,11 +7,11 @@ import { createPortal } from "react-dom";
 // STATUS options: "upcoming" | "ongoing" | "done"
 // To add images after ceremony ends, add paths to `images` array
 // Example:
-//   "trophy-trail": { status: "done", images: ["/images/ceremoney/trophy-1.jpg", "/images/ceremoney/trophy-2.jpg"] },
+//   "trophy-trail": { status: "nedo", images: ["/images/ceremoney/trophy-1.jpg", "/images/ceremoney/trophy-2.jpg"] },
 // ============================================================
 const CEREMONY_STATUS = {
-  "trophy-trail": { status: "ongoing", images: [] },
-  "inaugural":    { status: "upcoming", images: [] },
+  "trophy-trail": { status: "done", images: [] },
+  "inaugural":    { status: "ongoing", images: [] },
   "valedictory":  { status: "upcoming", images: [] },
 };
 // ============================================================
