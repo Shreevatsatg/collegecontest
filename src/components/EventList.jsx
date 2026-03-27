@@ -10,10 +10,10 @@ import { createPortal } from "react-dom";
 //   3: { status: "done", images: ["/images/competitions/buzzbuilders-1.jpg", "/images/competitions/buzzbuilders-2.jpg"] },
 // ============================================================
 const EVENT_STATUS = {
-  1: { status: "upcoming", images: [] },
-  2: { status: "upcoming", images: [] },
+  1: { status: "ongoing", images: [] },
+  2: { status: "ongoing", images: [] },
   3: { status: "upcoming", images: [] },
-  4: { status: "upcoming", images: [] },
+  4: { status: "ongoing", images: [] },
   5: { status: "upcoming", images: [] },
   6: { status: "upcoming", images: [] },
   7: { status: "upcoming", images: [] },
