@@ -13,7 +13,7 @@ const SESSION_STATUS = {
   1: { status: "done", images: [] },
   2: { status: "done", images: [] },
   3: { status: "done", images: [] },
-  4: { status: "upcoming", images: [] },
+  4: { status: "done", images: [] },
   5: { status: "upcoming", images: [] },
   6: { status: "upcoming", images: [] },
   7: { status: "upcoming", images: [] },
