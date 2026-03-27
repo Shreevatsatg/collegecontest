@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 // ============================================================
 const SESSION_STATUS = {
   1: { status: "done", images: [] },
-  2: { status: "upcoming", images: [] },
+  2: { status: "done", images: [] },
   3: { status: "done", images: [] },
   4: { status: "upcoming", images: [] },
   5: { status: "upcoming", images: [] },
