@@ -48,7 +48,7 @@ const ceremonies = {
   bottom: [
     {
       id: "valedictory",
-      time: "04:15 PM – 05:00 PM",
+      time: "5:00 PM onwards",
       title: "Valedictory Ceremony",
       subtitle: "The Grand Finale",
       venue: "T. Mohandas Pai Platinum Jubilee Block",
