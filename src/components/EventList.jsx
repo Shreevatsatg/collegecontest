@@ -12,9 +12,9 @@ import { createPortal } from "react-dom";
 const EVENT_STATUS = {
   1: { status: "ongoing", images: [] },
   2: { status: "ongoing", images: [] },
-  3: { status: "upcoming", images: [] },
+  3: { status: "ongoing", images: [] },
   4: { status: "ongoing", images: [] },
-  5: { status: "upcoming", images: [] },
+  5: { status: "ongoing", images: [] },
   6: { status: "upcoming", images: [] },
   7: { status: "upcoming", images: [] },
   8: { status: "upcoming", images: [] },
