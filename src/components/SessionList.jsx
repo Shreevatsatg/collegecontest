@@ -16,7 +16,7 @@ const SESSION_STATUS = {
   4: { status: "done", images: [] },
   5: { status: "done", images: [] },
   6: { status: "done", images: [] },
-  7: { status: "upcoming", images: [] },
+  7: { status: "ongoing", images: [] },
 };
 // ============================================================
 // END SESSION DAY CONTROLS

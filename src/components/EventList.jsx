@@ -17,7 +17,7 @@ const EVENT_STATUS = {
   5: { status: "done", images: ["/images/competitions/caption writing/photo.jpg"] },
   6: { status: "done", images: [] },
   7: { status: "done", images: [] },
-  8: { status: "ongoing", images: [] },
+  8: { status: "done", images: [] },
 };
 // ============================================================
 // END EVENT DAY CONTROLS
