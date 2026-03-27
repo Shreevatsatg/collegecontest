@@ -10,8 +10,8 @@ import { createPortal } from "react-dom";
 //   "trophy-trail": { status: "nedo", images: ["/images/ceremoney/trophy-1.jpg", "/images/ceremoney/trophy-2.jpg"] },
 // ============================================================
 const CEREMONY_STATUS = {
-  "trophy-trail": { status: "done", images: ["/images/ceremoney/inaugral/trophy.JPG"] },
-  "inaugural":    { status: "done", images: [] },
+  "trophy-trail": { status: "done", images: ["/images/ceremoney/inaugral/trophy.JPG","/images/ceremoney/inaugral/1.png","/images/ceremoney/inaugral/2.png","/images/ceremoney/inaugral/3.png"] },
+  "inaugural":    { status: "done", images: ["/images/ceremoney/inaugral/5.png"] },
   "valedictory":  { status: "upcoming", images: [] },
 };
 // ============================================================
