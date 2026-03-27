@@ -10,7 +10,7 @@ import { createPortal } from "react-dom";
 //   "trophy-trail": { status: "done", images: ["/images/ceremoney/trophy-1.jpg", "/images/ceremoney/trophy-2.jpg"] },
 // ============================================================
 const CEREMONY_STATUS = {
-  "trophy-trail": { status: "upcoming", images: [] },
+  "trophy-trail": { status: "ongoing", images: [] },
   "inaugural":    { status: "upcoming", images: [] },
   "valedictory":  { status: "upcoming", images: [] },
 };
