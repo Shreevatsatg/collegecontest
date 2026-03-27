@@ -12,7 +12,7 @@ import { createPortal } from "react-dom";
 const CEREMONY_STATUS = {
   "trophy-trail": { status: "done", images: ["/images/ceremoney/inaugral/trophy.JPG","/images/ceremoney/inaugral/1.png","/images/ceremoney/inaugral/2.png","/images/ceremoney/inaugral/3.png"] },
   "inaugural":    { status: "done", images: ["/images/ceremoney/inaugral/5.png"] },
-  "valedictory":  { status: "upcoming", images: [] },
+  "valedictory":  { status: "ongoing", images: [] },
 };
 // ============================================================
 // END CEREMONY DAY CONTROLS
