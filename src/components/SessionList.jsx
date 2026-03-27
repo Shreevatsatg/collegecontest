@@ -15,7 +15,7 @@ const SESSION_STATUS = {
   3: { status: "done", images: [] },
   4: { status: "done", images: [] },
   5: { status: "done", images: [] },
-  6: { status: "upcoming", images: [] },
+  6: { status: "ongoing", images: [] },
   7: { status: "upcoming", images: [] },
 };
 // ============================================================
