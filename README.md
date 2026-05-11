@@ -2,7 +2,6 @@
 
 **Beyond The Scroll** is the official digital platform for the inter-collegiate event organized by **MGM College Trust's Mahatma Gandhi Memorial Evening College, Udupi**. Held on March 27, 2026, this event brings together students for a day of intense competitions, insightful speaker sessions, and cultural showcases.
 
-![Project Banner](/public/images/banner.png) *(Placeholder for Banner)*
 
 ## 🚀 Overview
 
@@ -51,42 +50,10 @@ src/
 │   └── Footer.jsx          # Contact info and credits
 ├── App.jsx             # Main routing and layout
 └── main.jsx            # Entry point
-```
-
-## ⚙️ Installation & Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Shreevatsatg/collegecontest.git
-   cd collegecontest/frontend
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Run the development server:**
-   ```bash
-   npm run dev
-   ```
-
-4. **Build for production:**
-   ```bash
-   npm run build
-   ```
 
 ## 📍 Venue & Date
 
 - **Date:** March 27, 2026 (Friday)
 - **Venue:** T. Mohandas Pai Platinum Jubilee Block, MGM College Campus, Udupi.
 
-## 📞 Contact
-
-**Mahatma Gandhi Memorial Evening College, Udupi**
-- 🌐 [mgmevening.mgmudupi.ac.in](http://mgmevening.mgmudupi.ac.in)
-- 📞 0820 - 2001877
-- ✉️ mgmecudupi@gmail.com
-
----
 Developed for **MGM Evening College, Udupi**.
